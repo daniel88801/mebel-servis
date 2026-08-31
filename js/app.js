@@ -3,6 +3,7 @@
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
   function money(n) {
+    if (n == null || n === "") return "по запросу";
     return new Intl.NumberFormat("ru-RU").format(n) + " ₽";
   }
 
@@ -119,8 +120,8 @@
       <div class="card-body">
         <span class="mono card-sku">${p.sku}</span>
         <h3><a href="product.html?id=${p.id}">${p.name}</a></h3>
-        <p class="note">${p.sizes}</p>
-        <div class="price">${money(p.price)} <small>от</small></div>
+        ${p.sizes ? `<p class="note">${p.sizes}</p>` : ""}
+        <div class="price">${p.price == null ? "по запросу" : money(p.price) + " <small>от</small>"}</div>
         <div class="product-actions">
           <a class="btn btn-ghost btn-sm" href="product.html?id=${p.id}">Подробнее</a>
           <button class="btn btn-copper btn-sm" data-open-request data-product="${p.name} [${p.sku}]">В заявку</button>
@@ -188,9 +189,12 @@
     }
     const hits = $("#home-hits");
     if (hits) {
-      const featured = ["km6a", "km6f2", "km15", "km17", "stl81", "sms150", "stu2", "d-ward2"]
-        .map(productById)
-        .filter(Boolean);
+      const featured = [];
+      for (const cat of MS.categories) {
+        const list = productsByCategory(cat.id);
+        if (list[0]) featured.push(list[0]);
+        if (featured.length >= 8) break;
+      }
       hits.innerHTML = featured.map(productCard).join("");
     }
     const adv = $("#home-adv");
@@ -286,14 +290,14 @@
       <div>
         <p class="mono" style="color:var(--copper)">${p.sku}${p.badge ? " · " + p.badge : ""}</p>
         <h1>${p.name}</h1>
-        <p>${p.desc}</p>
-        <div class="price" style="font-size:1.6rem;margin-top:16px">${money(p.price)} <small>от, оптовая цена — по запросу</small></div>
+        ${p.desc ? `<p>${p.desc}</p>` : ""}
+        <div class="price" style="font-size:1.6rem;margin-top:16px">${p.price == null ? "Цена по запросу" : money(p.price) + " <small>от, оптовая цена — по запросу</small>"}</div>
         <table class="spec">
-          <tr><td>Артикул</td><td>${p.sku}</td></tr>
+          <tr><td>Артикул</td><td>${p.sku || "—"}</td></tr>
           <tr><td>Категория</td><td><a href="catalog.html?cat=${cat.id}">${cat.name}</a></td></tr>
-          <tr><td>Габариты</td><td>${p.sizes}</td></tr>
-          <tr><td>Материалы</td><td>${p.material}</td></tr>
-          <tr><td>Декоры</td><td><span class="colors">${(p.colors || []).map((c) => `<span class="color">${c}</span>`).join("")}</span></td></tr>
+          ${p.sizes ? `<tr><td>Габариты</td><td>${p.sizes}</td></tr>` : ""}
+          ${p.material ? `<tr><td>Материалы</td><td>${p.material}</td></tr>` : ""}
+          ${(p.colors || []).length ? `<tr><td>Декоры</td><td><span class="colors">${p.colors.map((c) => `<span class="color">${c}</span>`).join("")}</span></td></tr>` : ""}
         </table>
         <div class="product-actions">
           <button class="btn btn-primary" data-open-request data-product="${p.name} [${p.sku}]">Запросить коммерческое предложение</button>

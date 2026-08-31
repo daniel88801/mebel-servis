@@ -1,0 +1,15 @@
+import fs from "node:fs";
+import vm from "node:vm";
+const code = fs.readFileSync("C:/Users/ACER/mebel/js/data.js", "utf8");
+const ctx = { window: {} };
+vm.createContext(ctx);
+vm.runInContext(code.replace("window.MS = window.MS || {};", "var MS = window.MS = window.MS || {};"), ctx);
+const products = ctx.window.MS.products;
+const nulls = products.filter((p) => p.price == null);
+console.log("nulls", nulls.length);
+for (const p of nulls.slice(0, 15)) console.log(p.category, p.sku, p.name, p.image);
+const imgs = products.filter((p) => !fs.existsSync("C:/Users/ACER/mebel/" + p.image));
+console.log("missing files", imgs.length);
+console.log("sample prices", products.slice(0, 6).map((p) => p.sku + "=" + p.price).join(", "));
+const folding = products.filter((p) => p.category === "folding");
+console.log("folding", folding.map((p) => p.sku + " " + p.price + " " + p.name).join("\n"));
