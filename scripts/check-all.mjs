@@ -1,0 +1,14 @@
+import fs from "node:fs";
+import vm from "node:vm";
+const code = fs.readFileSync("C:/Users/ACER/mebel/js/data.js", "utf8");
+const ctx = { window: {} };
+vm.createContext(ctx);
+vm.runInContext(code.replace("window.MS = window.MS || {};", "var MS = window.MS = window.MS || {};"), ctx);
+const { products, categories } = ctx.window.MS;
+const withPrice = products.filter((p) => p.price != null).length;
+const withSize = products.filter((p) => p.sizes).length;
+const missingImg = products.filter((p) => !fs.existsSync("C:/Users/ACER/mebel/" + p.image)).length;
+console.log("cats", categories.length, categories.map((c) => c.name).join(" | "));
+console.log("products", products.length, "price", withPrice, "sizes", withSize, "missingImg", missingImg);
+console.log("sample", products[0].name, products[0].price, products[0].sizes, products[0].sku);
+console.log("folding", products.filter((p) => p.category === "folding").map((p) => p.sku + "=" + p.price).join(", "));

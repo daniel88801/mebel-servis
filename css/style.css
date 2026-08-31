@@ -374,8 +374,7 @@ select {
 /* Categories */
 .cats {
   display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
-  grid-template-rows: 280px 220px;
+  grid-template-columns: repeat(4, 1fr);
   gap: 14px;
 }
 
@@ -384,11 +383,8 @@ select {
   overflow: hidden;
   border-radius: var(--radius);
   color: #f4efe4;
-  min-height: 180px;
-}
-
-.cat:first-child {
-  grid-row: 1 / span 2;
+  min-height: 200px;
+  height: 210px;
 }
 
 .cat img {
@@ -677,6 +673,77 @@ textarea {
   gap: 10px;
   margin-bottom: 22px;
   align-items: center;
+}
+
+.catalog-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 28px;
+  align-items: start;
+  padding-bottom: 48px;
+}
+
+.filters {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 16px 20px;
+  position: sticky;
+  top: calc(var(--header) + 12px);
+}
+
+.filters h4 {
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: "IBM Plex Mono", monospace;
+  color: var(--muted);
+  margin: 14px 0 8px;
+}
+
+.filters h4:first-child {
+  margin-top: 0;
+}
+
+.filters select,
+.filters input[type="number"] {
+  width: 100%;
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.filter-check {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.filter-check label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 10px;
+  cursor: pointer;
+  color: var(--ink-2);
+}
+
+.filter-check input {
+  width: auto;
+  margin: 0;
+}
+
+.filter-check label.on {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
 }
 
 .search {
@@ -992,15 +1059,19 @@ textarea {
   .product,
   .contacts-grid,
   .footer-grid,
-  .form-grid.two {
+  .form-grid.two,
+  .catalog-layout {
     grid-template-columns: 1fr;
   }
-  .cats {
-    grid-template-rows: none;
+  .filters {
+    position: static;
   }
-  .cat:first-child {
-    grid-row: auto;
-    min-height: 280px;
+  .cats {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cat {
+    min-height: 170px;
+    height: 180px;
   }
   .hero-stats {
     grid-template-columns: 1fr 1fr 1fr;

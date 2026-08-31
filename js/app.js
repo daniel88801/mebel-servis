@@ -214,27 +214,103 @@
   function renderCatalog() {
     const grid = $("#catalog-grid");
     if (!grid) return;
-    const chips = $("#chips");
     const search = $("#search");
     const sort = $("#sort");
     const title = $("#cat-title");
     const lead = $("#cat-lead");
-    let current = param("cat") || "all";
+    const countEl = $("#cat-count");
+    const filtersEl = $("#filters");
+    const state = {
+      cat: param("cat") || "all",
+      color: "",
+      badge: "",
+      pmin: "",
+      pmax: "",
+      wmin: "",
+      wmax: "",
+      hmin: "",
+      hmax: "",
+      dmin: "",
+      dmax: "",
+    };
 
-    function paintChips() {
-      chips.innerHTML =
-        `<button class="chip ${current === "all" ? "on" : ""}" data-cat="all">Все</button>` +
-        MS.categories
-          .map(
-            (c) =>
-              `<button class="chip ${current === c.id ? "on" : ""}" data-cat="${c.id}">${c.name}</button>`
-          )
-          .join("");
+    const priced = MS.products.filter((p) => p.price != null).map((p) => p.price);
+    const widths = MS.products.map((p) => p.width).filter(Boolean);
+    const heights = MS.products.map((p) => p.height).filter(Boolean);
+    const depths = MS.products.map((p) => p.length).filter(Boolean);
+    const colors = [...new Set(MS.products.flatMap((p) => p.colors || []))].sort();
+    const badges = [...new Set(MS.products.map((p) => p.badge).filter(Boolean))];
+
+    function paintFilters() {
+      filtersEl.innerHTML = `
+        <h4>Раздел</h4>
+        <select id="f-cat">
+          <option value="all">Все разделы</option>
+          ${MS.categories.map((c) => `<option value="${c.id}" ${state.cat === c.id ? "selected" : ""}>${c.name}</option>`).join("")}
+        </select>
+        <h4>Цвет</h4>
+        <select id="f-color">
+          <option value="">Все цвета</option>
+          ${colors.map((c) => `<option value="${c}" ${state.color === c ? "selected" : ""}>${c}</option>`).join("")}
+        </select>
+        <h4>Цена, ₽</h4>
+        <div class="filter-row">
+          <input id="f-pmin" type="number" min="0" placeholder="от" value="${state.pmin}">
+          <input id="f-pmax" type="number" min="0" placeholder="до" value="${state.pmax}">
+        </div>
+        <h4>Ширина, мм</h4>
+        <div class="filter-row">
+          <input id="f-wmin" type="number" min="0" placeholder="от" value="${state.wmin}">
+          <input id="f-wmax" type="number" min="0" placeholder="до" value="${state.wmax}">
+        </div>
+        <h4>Высота, мм</h4>
+        <div class="filter-row">
+          <input id="f-hmin" type="number" min="0" placeholder="от" value="${state.hmin}">
+          <input id="f-hmax" type="number" min="0" placeholder="до" value="${state.hmax}">
+        </div>
+        <h4>Длина / глубина, мм</h4>
+        <div class="filter-row">
+          <input id="f-dmin" type="number" min="0" placeholder="от" value="${state.dmin}">
+          <input id="f-dmax" type="number" min="0" placeholder="до" value="${state.dmax}">
+        </div>
+        <h4>Метка</h4>
+        <select id="f-badge">
+          <option value="">Все</option>
+          ${badges.map((b) => `<option value="${b}" ${state.badge === b ? "selected" : ""}>${b}</option>`).join("")}
+        </select>
+        <button class="btn btn-ghost btn-sm" id="f-reset" type="button" style="width:100%;margin-top:16px">Сбросить фильтры</button>
+      `;
+    }
+
+    function num(id) {
+      const v = $(id)?.value;
+      return v === "" || v == null ? null : Number(v);
+    }
+
+    function inRange(val, min, max) {
+      if (val == null) return !(min || max);
+      if (min != null && val < min) return false;
+      if (max != null && val > max) return false;
+      return true;
     }
 
     function draw() {
       const q = (search.value || "").toLowerCase().trim();
-      let list = current === "all" ? [...MS.products] : productsByCategory(current);
+      let list = state.cat === "all" ? [...MS.products] : productsByCategory(state.cat);
+      const pmin = num("#f-pmin");
+      const pmax = num("#f-pmax");
+      const wmin = num("#f-wmin");
+      const wmax = num("#f-wmax");
+      const hmin = num("#f-hmin");
+      const hmax = num("#f-hmax");
+      const dmin = num("#f-dmin");
+      const dmax = num("#f-dmax");
+      if (state.color) list = list.filter((p) => (p.colors || []).includes(state.color));
+      if (state.badge) list = list.filter((p) => p.badge === state.badge);
+      if (pmin != null || pmax != null) list = list.filter((p) => inRange(p.price, pmin, pmax));
+      if (wmin != null || wmax != null) list = list.filter((p) => inRange(p.width, wmin, wmax));
+      if (hmin != null || hmax != null) list = list.filter((p) => inRange(p.height, hmin, hmax));
+      if (dmin != null || dmax != null) list = list.filter((p) => inRange(p.length, dmin, dmax));
       if (q) {
         list = list.filter(
           (p) =>
@@ -243,30 +319,55 @@
             (p.desc || "").toLowerCase().includes(q)
         );
       }
-      if (sort.value === "price-asc") list.sort((a, b) => a.price - b.price);
-      if (sort.value === "price-desc") list.sort((a, b) => b.price - a.price);
-      const cat = categoryById(current);
+      if (sort.value === "price-asc") list.sort((a, b) => (a.price ?? 1e12) - (b.price ?? 1e12));
+      if (sort.value === "price-desc") list.sort((a, b) => (b.price ?? -1) - (a.price ?? -1));
+      if (sort.value === "name") list.sort((a, b) => a.name.localeCompare(b.name, "ru"));
+      const cat = categoryById(state.cat);
       title.textContent = cat ? cat.name : "Каталог";
       lead.textContent = cat
         ? cat.text
-        : "Семь направлений. Серийные партии и изготовление по техническому заданию.";
+        : "Полный каталог: фильтры по разделу, цвету, цене и размерам. Серийные партии и изготовление по ТЗ.";
+      if (countEl) countEl.textContent = `Найдено: ${list.length}`;
       grid.innerHTML = list.length
         ? list.map(productCard).join("")
-        : `<div class="empty">Ничего не найдено. Измените запрос или категорию.</div>`;
+        : `<div class="empty">Ничего не найдено. Измените фильтры.</div>`;
     }
 
-    paintChips();
-    chips.addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-cat]");
-      if (!btn) return;
-      current = btn.dataset.cat;
-      const url = new URL(location.href);
-      if (current === "all") url.searchParams.delete("cat");
-      else url.searchParams.set("cat", current);
-      history.replaceState(null, "", url);
-      paintChips();
-      draw();
-    });
+    function bindFilters() {
+      $("#f-cat").addEventListener("change", (e) => {
+        state.cat = e.target.value;
+        const url = new URL(location.href);
+        if (state.cat === "all") url.searchParams.delete("cat");
+        else url.searchParams.set("cat", state.cat);
+        history.replaceState(null, "", url);
+        draw();
+      });
+      $("#f-color").addEventListener("change", (e) => {
+        state.color = e.target.value;
+        draw();
+      });
+      $("#f-badge").addEventListener("change", (e) => {
+        state.badge = e.target.value;
+        draw();
+      });
+      ["#f-pmin", "#f-pmax", "#f-wmin", "#f-wmax", "#f-hmin", "#f-hmax", "#f-dmin", "#f-dmax"].forEach((id) => {
+        $(id).addEventListener("input", draw);
+      });
+      $("#f-reset").addEventListener("click", () => {
+        state.cat = "all";
+        state.color = "";
+        state.badge = "";
+        history.replaceState(null, "", "catalog.html");
+        paintFilters();
+        bindFilters();
+        search.value = "";
+        sort.value = "default";
+        draw();
+      });
+    }
+
+    paintFilters();
+    bindFilters();
     search.addEventListener("input", draw);
     sort.addEventListener("change", draw);
     draw();
