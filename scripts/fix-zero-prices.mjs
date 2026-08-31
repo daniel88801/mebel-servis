@@ -1,0 +1,12 @@
+import fs from "node:fs";
+import vm from "node:vm";
+const code = fs.readFileSync("C:/Users/ACER/mebel/js/data.js", "utf8");
+const ctx = { window: {} };
+vm.createContext(ctx);
+vm.runInContext(code.replace("window.MS = window.MS || {};", "var MS = window.MS = window.MS || {};"), ctx);
+const z = ctx.window.MS.products.filter((p) => p.price === 0);
+console.log("price 0", z.length);
+z.slice(0, 20).forEach((p) => console.log(p.category, p.sku, p.name, p.price));
+const nulls = ctx.window.MS.products.filter((p) => p.price == null).length;
+console.log("null", nulls);
+console.log("covers unique", new Set(ctx.window.MS.categories.map((c) => c.image)).size);
