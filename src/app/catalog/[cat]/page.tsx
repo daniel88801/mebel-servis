@@ -1,8 +1,14 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { CatalogBrowser } from "@/components/CatalogBrowser";
-import { categories, categoryById, productsByCategory, toCardData } from "@/data/catalog";
+import { CatalogBrowser } from "@/components/catalog/CatalogBrowser";
+import {
+  categories,
+  categoryById,
+  categoryCounts,
+  productsByCategory,
+  toCardData,
+} from "@/data/catalog";
 
 type Props = { params: Promise<{ cat: string }> };
 
@@ -30,7 +36,12 @@ export default async function CategoryPage({ params }: Props) {
   return (
     <main className="wrap" id="content">
       <Suspense fallback={<div className="empty">Загружаем каталог…</div>}>
-        <CatalogBrowser products={cards} categories={categories} category={category} />
+        <CatalogBrowser
+          products={cards}
+          categories={categories}
+          categoryCounts={categoryCounts}
+          category={category}
+        />
       </Suspense>
     </main>
   );
