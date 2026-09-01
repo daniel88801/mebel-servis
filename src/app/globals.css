@@ -30,7 +30,7 @@ html {
 }
 
 body {
-  font-family: Manrope, "Segoe UI", sans-serif;
+  font-family: var(--font-sans), Manrope, "Segoe UI", sans-serif;
   background: var(--paper);
   color: var(--ink);
   line-height: 1.55;
@@ -61,7 +61,7 @@ select {
 }
 
 .mono {
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-family: var(--font-mono), "IBM Plex Mono", ui-monospace, monospace;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-size: 0.72rem;
@@ -172,7 +172,9 @@ select {
   padding: 8px 14px;
   border-radius: 999px;
   border: 1px solid transparent;
-  transition: 0.18s background, 0.18s border-color;
+  transition:
+    0.18s background,
+    0.18s border-color;
 }
 
 .header-phone:hover {
@@ -190,7 +192,10 @@ select {
   border-radius: 999px;
   padding: 12px 20px;
   font-weight: 650;
-  transition: 0.18s transform, 0.18s background, 0.18s color;
+  transition:
+    0.18s transform,
+    0.18s background,
+    0.18s color;
 }
 
 .btn:hover {
@@ -498,7 +503,7 @@ select {
   font-size: 0.68rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-mono), "IBM Plex Mono", monospace;
 }
 
 .card-img-wrap {
@@ -696,7 +701,7 @@ textarea {
   font-size: 0.82rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-family: "IBM Plex Mono", monospace;
+  font-family: var(--font-mono), "IBM Plex Mono", monospace;
   color: var(--muted);
   margin: 14px 0 8px;
 }
@@ -923,7 +928,9 @@ textarea {
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
   text-decoration-color: rgba(196, 92, 50, 0.45);
-  transition: color 0.18s, text-decoration-color 0.18s;
+  transition:
+    color 0.18s,
+    text-decoration-color 0.18s;
 }
 
 .prose a:hover,
@@ -937,7 +944,9 @@ textarea {
 .crumbs a {
   color: var(--ink-2);
   border-bottom: 1px solid transparent;
-  transition: color 0.18s, border-color 0.18s;
+  transition:
+    color 0.18s,
+    border-color 0.18s;
 }
 
 .crumbs a:hover {
@@ -1120,5 +1129,387 @@ textarea {
   }
   .hero-inner {
     padding: 48px 16px 36px;
+  }
+}
+
+/* Пагинация каталога */
+.pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px 0 60px;
+}
+
+.pager-state {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.pager .btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pager .btn:disabled:hover {
+  transform: none;
+}
+
+/* Переключатель в панели фильтров */
+.filter-toggle {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 18px;
+  font-size: 0.86rem;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.filter-toggle input {
+  width: auto;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+/* Ловушка для ботов */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Ошибка отправки формы */
+.form-error {
+  padding: 14px;
+  background: #f6e3dc;
+  border: 1px solid var(--copper);
+  border-radius: 10px;
+  color: var(--copper-2);
+  font-size: 0.9rem;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.btn:disabled:hover {
+  transform: none;
+}
+
+/* Плавающая кнопка обратного звонка */
+.callback-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 70;
+  width: 56px;
+  height: 56px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--copper);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(22, 24, 20, 0.28);
+  display: grid;
+  place-items: center;
+  transition:
+    0.18s transform,
+    0.18s background;
+}
+
+.callback-fab:hover {
+  background: var(--copper-2);
+  transform: translateY(-2px);
+}
+
+.callback-fab svg {
+  width: 24px;
+  height: 24px;
+}
+
+.callback-panel {
+  position: fixed;
+  right: 20px;
+  bottom: 88px;
+  z-index: 70;
+  width: min(340px, calc(100vw - 40px));
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.callback-panel h3 {
+  margin: 6px 0 4px;
+  font-size: 1.15rem;
+  letter-spacing: -0.02em;
+}
+
+/* Уведомление о cookie */
+.cookie-notice {
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 65;
+  width: min(520px, calc(100vw - 40px));
+  background: var(--ink);
+  color: #e8e1d0;
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: var(--shadow);
+  font-size: 0.86rem;
+}
+
+.cookie-notice a {
+  color: #f0b596;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cookie-notice .btn {
+  flex-shrink: 0;
+  background: var(--copper);
+  color: #fff;
+}
+
+.cookie-notice .btn:hover {
+  background: var(--copper-2);
+}
+
+@media (max-width: 720px) {
+  .cookie-notice {
+    left: 16px;
+    right: 16px;
+    width: auto;
+    bottom: 88px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Заглушки под реальные данные компании */
+.todo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  background: rgba(196, 92, 50, 0.1);
+  border-bottom: 1px dashed var(--copper);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--copper-2);
+}
+
+.todo-tag {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--copper);
+  flex-shrink: 0;
+}
+
+.todo-block {
+  border: 1px dashed var(--copper);
+  background: rgba(196, 92, 50, 0.07);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin: 20px 0;
+}
+
+.todo-block h3 {
+  margin: 6px 0 10px;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+}
+
+.todo-block ul {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
+  color: var(--ink-2);
+  font-size: 0.93rem;
+}
+
+/* Карточки условий на страницах доставки, оплаты и опта */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding-bottom: 8px;
+}
+
+.info-card {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-card .mono {
+  color: var(--copper);
+}
+
+.info-card h2 {
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.info-card p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.95rem;
+}
+
+/* Строка цифр */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 28px 0 8px;
+  border-top: 1px solid var(--line);
+  margin-top: 24px;
+}
+
+.stat-row b {
+  display: block;
+  font-size: 1.8rem;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-row span {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+/* Нумерованный порядок работы */
+.steps-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.steps-list li {
+  background: var(--white);
+  padding: 24px;
+  display: flex;
+  gap: 16px;
+}
+
+.steps-list .mono {
+  color: var(--copper);
+  flex-shrink: 0;
+  padding-top: 4px;
+}
+
+.steps-list h3 {
+  font-size: 1.08rem;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+.steps-list p {
+  color: var(--ink-2);
+  font-size: 0.94rem;
+}
+
+/* Полоса с призывом к действию */
+.cta-strip {
+  background: var(--ink);
+  color: #efe8d8;
+  border-radius: var(--radius);
+  padding: 36px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.cta-strip h2 {
+  font-size: 1.6rem;
+  letter-spacing: -0.03em;
+  max-width: 22ch;
+}
+
+.cta-strip p {
+  color: #c4bba6;
+  margin-top: 8px;
+  max-width: 46ch;
+}
+
+.cta-strip .btn-ghost {
+  color: #efe8d8;
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Оплата: текст плюс карточка реквизитов */
+.payment-layout {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* Мессенджеры в подвале */
+.messengers {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.messenger {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #d8d0be;
+  transition:
+    0.18s background,
+    0.18s color;
+}
+
+.messenger:hover {
+  background: var(--copper);
+  border-color: var(--copper);
+  color: #fff;
+}
+
+.messenger svg {
+  width: 19px;
+  height: 19px;
+}
+
+@media (max-width: 980px) {
+  .info-grid,
+  .stat-row,
+  .steps-list,
+  .payment-layout {
+    grid-template-columns: 1fr;
+  }
+  .cta-strip {
+    padding: 28px 24px;
   }
 }

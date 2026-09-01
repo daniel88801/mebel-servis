@@ -6,3 +6,10 @@ images/_*.png
 .idea/
 .vscode/
 node_modules/
+.next/
+next-env.d.ts
+*.tsbuildinfo
+
+# локальные переменные окружения
+.env
+.env.local
