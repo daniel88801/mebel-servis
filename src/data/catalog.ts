@@ -40,6 +40,8 @@ export type Product = {
   width?: number;
   height?: number;
   badge?: string;
+  /** Нормализованные цвета для фильтра: из «М/К - серый, ЛДСП - Ольха» получается два тега. */
+  colorTags?: string[];
   /* Поля ниже разбирает scripts/enrich-catalog.mjs из текста `desc`. */
   weight?: number;
   volume?: number;
@@ -84,10 +86,8 @@ export function toCardData(p: Product): ProductCardData {
   return card;
 }
 
-/** Строка для поиска. Собирается на клиенте, чтобы не дублировать её в пропсах. */
-export function searchText(p: ProductCardData) {
-  return [p.name, p.sku, p.material, p.sizes, p.gost, p.coating, ...(p.colors ?? [])]
-    .filter(Boolean)
-    .join(" ")
-    .toLowerCase();
-}
+/** Объём каждого раздела — показываем числа рядом с пунктами навигации по каталогу. */
+export const categoryCounts: Record<string, number> = {
+  all: products.length,
+  ...Object.fromEntries(categories.map((c) => [c.id, productsByCategory(c.id).length])),
+};

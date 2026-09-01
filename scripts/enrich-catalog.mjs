@@ -46,7 +46,63 @@ function pickAll(list, match) {
   return list.filter(([k]) => match(k)).map(([, v]) => v);
 }
 
+/**
+ * Цвет в исходнике записан как угодно: «Серый» и «серый», составные описания
+ * «М/К - серый, ЛДСП - Ольха», коды «RAL 7024 (серый графит)» и вовсе не цвет
+ * «В ассортименте». Из-за этого в фильтре получалось 113 значений.
+ *
+ * Исходную строку оставляем в `colors` — она нужна в характеристиках товара,
+ * а для фильтра собираем `colorTags`: базовые цвета и декоры.
+ */
+const NOT_A_COLOR = /^(в ассортименте|разные|любой|по запросу|на выбор)$/i;
+
+/** Слова про фактуру и части изделия — к цвету не относятся. */
+const NOISE = /(полуматов|матов|глянцев|структурн|шагрень|эмал)\S*/gi;
+const PARTS = /(м\/к|мк|лдсп|каркас|корпус|двери|дверцы|фасад|столешниц|полк)\S*\s*[-—:]?/gi;
+
+/**
+ * В данных попадаются латинские буквы вместо кириллических: «Cерый» с латинской C
+ * попадал в фильтр отдельным значением. Заменяем только внутри слов,
+ * где кириллица уже есть, чтобы не задеть настоящую латиницу.
+ */
+const HOMOGLYPHS = {
+  A: "А", B: "В", C: "С", E: "Е", H: "Н", K: "К", M: "М", O: "О", P: "Р", T: "Т", X: "Х",
+  a: "а", c: "с", e: "е", o: "о", p: "р", x: "х", y: "у",
+};
+
+function fixHomoglyphs(value) {
+  if (!/[а-яё]/i.test(value)) return value;
+  return value.replace(/[ABCEHKMOPTXacepoxy]/g, (ch) => HOMOGLYPHS[ch] ?? ch);
+}
+
+function colorTags(raw) {
+  const tags = [];
+  for (const value of raw) {
+    if (NOT_A_COLOR.test(value.trim())) continue;
+    // Коды RAL убираем до замены омоглифов: иначе «A» в RAL станет кириллической.
+    const parts = fixHomoglyphs(value.replace(/RAL\s*\d+/gi, " "))
+      .replace(PARTS, " ")
+      .split(/[\/,;]| и /);
+
+    for (const part of parts) {
+      const clean = part
+        .replace(/[()]/g, " ")
+        .replace(NOISE, " ")
+        .replace(/\s+/g, " ")
+        .replace(/^[\s.\-—]+|[\s.\-—]+$/g, "");
+      if (!clean || clean.length < 3 || clean.length > 20) continue;
+      if (!/[а-яё]/i.test(clean)) continue;
+      // «двери синие» и «синий» — один цвет: приводим прилагательное к единственному числу
+      const single = clean.includes(" ") ? clean : clean.replace(/ые$/i, "ый").replace(/ие$/i, "ий");
+      const tag = single[0].toUpperCase() + single.slice(1).toLowerCase();
+      if (!tags.includes(tag)) tags.push(tag);
+    }
+  }
+  return tags;
+}
+
 const FIELDS = [
+  "colorTags",
   "weight",
   "volume",
   "load",
@@ -134,6 +190,9 @@ function enrich(product) {
 
   const sleeping = pick(list, (k) => k === "спальное место");
   if (sleeping) next.sleeping = sleeping;
+
+  const tags = colorTags(product.colors ?? []);
+  if (tags.length) next.colorTags = tags;
 
   const gost = `${product.name} ${product.desc || ""}`.match(/ГОСТ\s*[\dR\s.-]*\d/i);
   if (gost) next.gost = gost[0].replace(/\s+/g, " ").trim();
