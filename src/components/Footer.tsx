@@ -91,7 +91,8 @@ export function Footer() {
       </div>
       <div className="wrap footer-bottom">
         <span>
-          © {new Date().getFullYear()} {company.legal}. ИНН {company.inn}
+          © {new Date().getFullYear()} {company.legal} · ИНН {company.inn} · ОГРН {company.ogrn} ·{" "}
+          <Link href="/payment">реквизиты</Link>
         </span>
         <span>Цены ориентировочные, для оптовых партий — по запросу</span>
       </div>
