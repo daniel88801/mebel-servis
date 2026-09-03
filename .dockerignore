@@ -1,0 +1,17 @@
+.git
+.github
+.next
+node_modules
+data
+test-results
+playwright-report
+blob-report
+e2e
+playwright.config.ts
+.env
+.env.local
+.DS_Store
+.idea
+.vscode
+*.log
+scripts

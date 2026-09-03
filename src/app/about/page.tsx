@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { LeadForm } from "@/components/LeadForm";
+import { PdConsentText } from "@/components/LegalConsent";
 import { ClientIcons } from "@/components/ClientIcons";
 import { categories, categoryCounts, company, products } from "@/data/catalog";
 
@@ -99,10 +100,10 @@ export default function AboutPage() {
       <section className="section" style={{ paddingTop: 12 }}>
         <div className="wrap split">
           <Image
-            src="/images/1.jpg"
+            src="/images/production-beds.jpg"
             alt="Сборка металлических кроватей в производственном цехе"
-            width={1280}
-            height={720}
+            width={1152}
+            height={864}
             sizes="(max-width: 980px) 100vw, 50vw"
           />
           <div className="prose">
@@ -177,8 +178,16 @@ export default function AboutPage() {
           <ul className="nomen">
             {categories.map((c) => (
               <li key={c.id}>
-                <Link href={`/catalog/${c.id}`}>
-                  <span>{c.name}</span>
+                <Link
+                  href={`/catalog/${c.id}`}
+                  className={c.id === "sale" ? "nomen-sale" : undefined}
+                >
+                  <span>
+                    {c.name}
+                    {c.id === "sale" && (
+                      <span className="badge badge-sale nomen-sale-mark">Акция</span>
+                    )}
+                  </span>
                   <span className="nomen-count">{categoryCounts[c.id]}</span>
                 </Link>
               </li>
@@ -268,11 +277,7 @@ export default function AboutPage() {
             className="form-card form-grid"
             submitLabel="Отправить вопрос"
             okText="Вопрос принят. Ответим в рабочее время."
-            consent={
-              <>
-                Согласен с <Link href="/privacy">политикой обработки персональных данных</Link>
-              </>
-            }
+            consent={<PdConsentText />}
           />
         </div>
       </section>

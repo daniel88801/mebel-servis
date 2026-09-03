@@ -2,7 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ProductCard } from "@/components/ProductCard";
 import { LeadForm } from "@/components/LeadForm";
+import { PdConsentText } from "@/components/LegalConsent";
 import { RequestButton } from "@/components/RequestModal";
+import { HeroSlideshow } from "@/components/HeroSlideshow";
 import { advantages, categories, productsByCategory, toCardData } from "@/data/catalog";
 
 /** По одной первой позиции из каждого раздела, максимум восемь. */
@@ -16,13 +18,7 @@ export default function HomePage() {
   return (
     <>
       <section className="hero">
-        <Image
-          src="/images/hero.jpg"
-          alt="Готовая металлическая мебель для объектов: кровати, тумбы, столы"
-          fill
-          priority
-          sizes="100vw"
-        />
+        <HeroSlideshow />
         <div className="hero-inner">
           <p className="kicker mono">Нижний Новгород · собственное производство</p>
           <h1>Мебель, которая выдерживает объект</h1>
@@ -70,13 +66,18 @@ export default function HomePage() {
             </div>
             <div className="cats">
               {categories.map((cat) => (
-                <Link className="cat" key={cat.id} href={`/catalog/${cat.id}`}>
+                <Link
+                  className={`cat${cat.id === "sale" ? " cat-sale" : ""}`}
+                  key={cat.id}
+                  href={`/catalog/${cat.id}`}
+                >
                   <Image
                     src={cat.image}
                     alt={cat.name}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 25vw"
                   />
+                  {cat.id === "sale" && <span className="badge badge-sale">Распродажа</span>}
                   <div className="cat-body">
                     <span className="mono">{cat.short}</span>
                     <h3>{cat.name}</h3>
@@ -90,10 +91,10 @@ export default function HomePage() {
         <section className="section" style={{ paddingTop: 0 }}>
           <div className="wrap split">
             <Image
-              src="/images/2.jpg"
+              src="/images/production.jpg"
               alt="Металлообработка и корпусное производство"
-              width={900}
-              height={700}
+              width={1152}
+              height={864}
               sizes="(max-width: 980px) 100vw, 50vw"
             />
             <div>
@@ -215,11 +216,7 @@ export default function HomePage() {
               className="form-card form-grid"
               submitLabel="Отправить заявку"
               okText="Заявка принята. Свяжемся с вами в рабочее время."
-              consent={
-                <>
-                  Согласен с <Link href="/privacy">политикой обработки персональных данных</Link>
-                </>
-              }
+              consent={<PdConsentText />}
             />
           </div>
         </section>

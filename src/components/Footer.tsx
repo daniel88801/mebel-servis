@@ -49,7 +49,24 @@ export function Footer() {
               <Link href="/contacts">Контакты и реквизиты</Link>
             </li>
             <li>
+              <a href="/downloads/mebel-servis-katalog.pdf" download>
+                Скачать каталог PDF
+              </a>
+            </li>
+            <li>
+              <Link href="/cart">Корзина заявки</Link>
+            </li>
+            <li>
+              <Link href="/account">Кабинет закупщика</Link>
+            </li>
+            <li>
               <Link href="/privacy">Политика конфиденциальности</Link>
+            </li>
+            <li>
+              <Link href="/consent">Согласие на обработку ПДн</Link>
+            </li>
+            <li>
+              <Link href="/oferta">Оферта для юрлиц и ИП</Link>
             </li>
           </ul>
         </div>

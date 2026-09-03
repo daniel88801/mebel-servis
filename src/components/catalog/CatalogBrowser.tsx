@@ -120,7 +120,12 @@ export function CatalogBrowser({
             " / Каталог"
           )}
         </p>
-        <h1>{category ? category.name : "Каталог"}</h1>
+        <h1>
+          {category ? category.name : "Каталог"}
+          {category?.id === "sale" && (
+            <span className="badge badge-sale page-sale-mark">Сниженные цены</span>
+          )}
+        </h1>
         <p style={{ maxWidth: "60ch", marginTop: 10, color: "var(--ink-2)" }}>
           {category
             ? category.text

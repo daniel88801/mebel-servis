@@ -4,13 +4,25 @@
 
 ## Запуск
 
+Локально:
+
 ```bash
 npm install
 cp .env.example .env.local   # заполнить перед боевым запуском
 npm run dev                  # http://localhost:3000
-npm run build                # 869 страниц, из них 837 карточек товаров — статика
+npm run build
 npm start
 ```
+
+Боевой сервер в РФ — через Docker (SQLite в томе, Caddy на 80/443):
+
+```bash
+cp .env.example .env         # TELEGRAM_*, INBOX_PASSWORD, DOMAIN=meb-srv.ru
+docker compose up -d --build
+```
+
+Заявки и заказы пишутся в том `mebel-data`. Служебная лента: `https://meb-srv.ru/inbox`.
+`NEXT_PUBLIC_SITE_URL` и `NEXT_PUBLIC_YANDEX_METRIKA_ID` задаются на этапе сборки образа.
 
 ## Перед запуском в бой
 

@@ -1,5 +1,5 @@
 /** Боевой адрес сайта. Задаётся через NEXT_PUBLIC_SITE_URL при деплое. */
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://mebel-servis-nn.ru").replace(
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://meb-srv.ru").replace(
   /\/$/,
   "",
 );

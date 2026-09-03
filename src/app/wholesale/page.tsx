@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LeadForm } from "@/components/LeadForm";
+import { PdConsentText } from "@/components/LegalConsent";
 import { Todo, TodoBlock } from "@/components/Todo";
 import { categories, company, products } from "@/data/catalog";
 
@@ -172,11 +173,7 @@ export default function WholesalePage() {
             className="form-card form-grid"
             submitLabel="Запросить прайс"
             okText="Заявка принята. Пришлём прайс и расчёт в рабочее время."
-            consent={
-              <>
-                Согласен с <Link href="/privacy">политикой обработки персональных данных</Link>
-              </>
-            }
+            consent={<PdConsentText />}
           />
         </div>
       </section>

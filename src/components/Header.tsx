@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogoMark } from "./Logo";
 import { RequestButton } from "./RequestModal";
+import { HeaderIcons } from "./HeaderIcons";
 import { company } from "@/data/catalog";
 
 const NAV = [
@@ -49,6 +50,7 @@ export function Header() {
           <a className="header-phone" href="tel:+79200050110">
             {company.phones[0]}
           </a>
+          <HeaderIcons />
           <RequestButton className="btn btn-primary btn-sm">Оставить заявку</RequestButton>
           <button
             className="burger"

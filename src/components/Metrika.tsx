@@ -1,11 +1,18 @@
 "use client";
 
 import Script from "next/script";
+import { useSyncExternalStore } from "react";
+import { readCookieConsent, subscribeCookieConsent } from "@/lib/cookie-consent";
 
-/** Яндекс.Метрика. Без NEXT_PUBLIC_YANDEX_METRIKA_ID счётчик просто не подключается. */
+/** Яндекс.Метрика. Грузим только после явного согласия. */
 export function Metrika() {
   const id = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
-  if (!id) return null;
+  const choice = useSyncExternalStore(
+    subscribeCookieConsent,
+    () => readCookieConsent()?.choice ?? "none",
+    () => "none",
+  );
+  if (!id || choice !== "all") return null;
 
   return (
     <Script id="yandex-metrika" strategy="afterInteractive">

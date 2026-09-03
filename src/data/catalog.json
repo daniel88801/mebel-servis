@@ -23,133 +23,133 @@
       "id": "sale",
       "name": "Распродажа",
       "short": "Сниженные цены",
-      "image": "/images/catalog/src-b91-65empyb1dy05zhjml3zcozadjghu925g.jpg",
+      "image": "/images/categories/sale.jpg",
       "text": "Позиции по сниженной стоимости. Наличие и цену подтверждаем при заявке."
     },
     {
       "id": "army",
       "name": "Армейская мебель",
       "short": "Приказы МО РФ № 333 и № 120",
-      "image": "/images/catalog/src-c1c-c1c5d2bc0c7f20d6c0ff1511d0129bbb.jpg",
+      "image": "/images/categories/army.jpg",
       "text": "Мебель для казарм, ведомственных объектов и специальных учреждений."
     },
     {
       "id": "beds",
       "name": "Металлические кровати",
       "short": "Одноярусные и двухъярусные",
-      "image": "/images/catalog/src-15f-15fcc58c3f97c6646ea074df836e7eae.jpg",
+      "image": "/images/categories/beds.jpg",
       "text": "Сварные и сборно-разборные кровати с порошковым покрытием."
     },
     {
       "id": "corpus",
       "name": "Корпусная мебель из ЛДСП",
       "short": "Шкафы, тумбы, столы",
-      "image": "/images/catalog/src-caa-caa939cd1b4103a2b33630a8f6a1382f.jpg",
+      "image": "/images/categories/corpus.jpg",
       "text": "Корпусная мебель из ЛДСП для объектов и общежитий."
     },
     {
       "id": "frame",
       "name": "Мебель на металлокаркасе",
       "short": "Металл + ЛДСП",
-      "image": "/images/catalog/src-4b0-4b01ac63f19a4350c232d11e97cca8b3.jpg",
+      "image": "/images/categories/frame.jpg",
       "text": "Столы, стулья и табуреты на стальном каркасе с элементами из ЛДСП."
     },
     {
       "id": "folding",
       "name": "Раскладная мебель ЛДСП",
       "short": "Столы и скамьи",
-      "image": "/images/catalog/src-814-814bfc170420791b5de3e39accdf36d4.jpg",
+      "image": "/images/categories/folding.jpg",
       "text": "Складные столы и скамьи из ЛДСП на металлических опорах."
     },
     {
       "id": "plastic",
       "name": "Раскладная пластиковая мебель",
       "short": "Столы, стулья, скамьи",
-      "image": "/images/catalog/src-902-9020c9f38177dc9020046debc2a0ebc3.jpg",
+      "image": "/images/categories/plastic.jpg",
       "text": "Складная пластиковая мебель для мероприятий, столовых и временных объектов."
     },
     {
       "id": "covers",
       "name": "Чехлы",
       "short": "Для складной мебели",
-      "image": "/images/catalog/src-f77-zbio9374ww1uodnrug26jav01hvrc49f.jpg",
+      "image": "/images/categories/covers.jpg",
       "text": "Чехлы для переноски и хранения складной мебели."
     },
     {
       "id": "office",
       "name": "Офисная мебель",
       "short": "Кабинеты и персонал",
-      "image": "/images/catalog/src-f81-f8120188d996a67c6bcd42b77b374ba2.jpg",
+      "image": "/images/categories/office.jpg",
       "text": "Офисные столы, шкафы и тумбы для административных помещений."
     },
     {
       "id": "students",
       "name": "Мебель для учащихся",
       "short": "Аудиторные столы и стулья",
-      "image": "/images/catalog/src-f86-f869a8912255e20a934a390e4c893dba.jpg",
+      "image": "/images/categories/students.jpg",
       "text": "Ученические столы и стулья, в том числе регулируемые по высоте."
     },
     {
       "id": "lockers",
       "name": "Шкафы металлические",
       "short": "Хранение и раздевалки",
-      "image": "/images/catalog/src-2b5-2b5bf99a84a6163f8f501ef1d1e70e97.jpg",
+      "image": "/images/categories/lockers.jpg",
       "text": "Металлические шкафы для одежды, имущества и инвентаря."
     },
     {
       "id": "bedding",
       "name": "Постельные принадлежности",
       "short": "Матрасы и текстиль",
-      "image": "/images/catalog/src-cb5-cb5d23de70c0145e94493f43b37cb923.jpg",
+      "image": "/images/categories/bedding.jpg",
       "text": "Матрасы и постельные принадлежности для общежитий и объектов."
     },
     {
       "id": "hotels",
       "name": "Мебель для гостиниц и хостелов",
       "short": "Номера и холлы",
-      "image": "/images/catalog/src-cda-cda248105b3f98df860787b9e1ec5ec1.jpg",
+      "image": "/images/categories/hotels.jpg",
       "text": "Комплекты для гостиниц, хостелов и мини-отелей."
     },
     {
       "id": "workers",
       "name": "Мебель для рабочих и строителей",
       "short": "Бытовки и вахта",
-      "image": "/images/catalog/src-92e-cp3yv29zyj4k9vk1nuzyc4qaxn1wo71w.jpg",
+      "image": "/images/categories/workers.jpg",
       "text": "Мебель для строительных городков, бытовок и вахтовых общежитий."
     },
     {
       "id": "dorms",
       "name": "Мебель для общежитий",
       "short": "Комнаты и кухни",
-      "image": "/images/catalog/src-27a-v59o8m9z32y4i6xtcz17uuqk6mfpkzd9.JPG",
+      "image": "/images/categories/dorms.jpg",
       "text": "Кровати, шкафы, тумбы и столы для общежитий."
     },
     {
       "id": "industrial",
       "name": "Производственная мебель",
       "short": "Цех и склад",
-      "image": "/images/catalog/src-ad8-ozxxhorlg2r122xkhhb5el5qdrfwosls.jpg",
+      "image": "/images/categories/industrial.jpg",
       "text": "Мебель для производственных и складских помещений."
     },
     {
       "id": "banquet",
       "name": "Мебель для банкетов",
       "short": "Залы и мероприятия",
-      "image": "/images/catalog/src-f79-f794b30c6f028225d4a7c7da2ac5ba7b.jpg",
+      "image": "/images/categories/banquet.jpg",
       "text": "Банкетные столы, стулья и скамьи."
     },
     {
       "id": "medical",
       "name": "Медицинская мебель",
       "short": "Палаты и кабинеты",
-      "image": "/images/catalog/src-215-3frofbo1jo4xs2w2c4l4h1b69valh2fm.jpg",
+      "image": "/images/categories/medical.jpg",
       "text": "Мебель для медицинских учреждений и палат."
     },
     {
       "id": "safes",
       "name": "Сейфы",
       "short": "Хранение ценностей",
-      "image": "/images/catalog/src-588-4qwxtxwobprnctta6um69492ohffea2a.jpg",
+      "image": "/images/categories/safes.jpg",
       "text": "Сейфы для документов и ценностей."
     }
   ],

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/ProductCard";
 import { JsonLd } from "@/components/JsonLd";
 import { RequestButton } from "@/components/RequestModal";
+import { AddToCartButton } from "@/components/AddToCartButton";
 import { money, productHref } from "@/lib/format";
 import {
   categoryById,
@@ -123,11 +124,18 @@ export default async function ProductPage({ params }: Props) {
             priority
             sizes="(max-width: 980px) 100vw, 50vw"
           />
+          {product.category === "sale" && (
+            <span className="badge badge-sale">Распродажа</span>
+          )}
         </div>
         <div>
           <p className="mono" style={{ color: "var(--copper)" }}>
             {product.sku}
-            {product.badge ? ` · ${product.badge}` : ""}
+            {product.category === "sale"
+              ? " · Распродажа"
+              : product.badge
+                ? ` · ${product.badge}`
+                : ""}
           </p>
           <h1>{product.name}</h1>
           {product.desc && <p style={{ whiteSpace: "pre-line" }}>{product.desc}</p>}
@@ -136,7 +144,8 @@ export default async function ProductPage({ params }: Props) {
               "Цена по запросу"
             ) : (
               <>
-                {money(product.price)} <small>от, оптовая цена — по запросу</small>
+                <small>от</small> {money(product.price)}{" "}
+                <small>оптовая цена — по запросу</small>
               </>
             )}
           </div>
@@ -231,6 +240,16 @@ export default async function ProductPage({ params }: Props) {
             </tbody>
           </table>
           <div className="product-actions">
+            <AddToCartButton
+              className="btn btn-copper"
+              product={{
+                id: product.id,
+                sku: product.sku,
+                name: product.name,
+                image: product.image,
+                price: product.price,
+              }}
+            />
             <RequestButton className="btn btn-primary" product={`${product.name} [${product.sku}]`}>
               Запросить коммерческое предложение
             </RequestButton>

@@ -15,6 +15,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/payment",
     "/wholesale",
     "/privacy",
+    "/consent",
+    "/oferta",
   ];
 
   return [

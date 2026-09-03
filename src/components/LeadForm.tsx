@@ -7,8 +7,9 @@ import { useState, type CSSProperties, type FormEvent, type ReactNode } from "re
  * `request` — форма модалки: поля в столбик, привязка к позиции каталога.
  * `contacts` — имя, телефон, свободное сообщение.
  * `callback` — только имя и телефон, для виджета обратного звонка.
+ * `cart` — спецификация из корзины.
  */
-type Variant = "home" | "request" | "contacts" | "callback";
+type Variant = "home" | "request" | "contacts" | "callback" | "cart";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -21,6 +22,10 @@ export function LeadForm({
   submitLabel,
   okText,
   consent,
+  defaultName = "",
+  defaultPhone = "",
+  defaultCompany = "",
+  onSent,
 }: {
   variant: Variant;
   product?: string;
@@ -30,6 +35,10 @@ export function LeadForm({
   submitLabel: string;
   okText: string;
   consent: ReactNode;
+  defaultName?: string;
+  defaultPhone?: string;
+  defaultCompany?: string;
+  onSent?: (data: { name: string; phone: string; company: string; comment: string }) => void;
 }) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
@@ -52,6 +61,12 @@ export function LeadForm({
       });
       const body = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(body.error || "Не удалось отправить заявку");
+      onSent?.({
+        name: data.name ?? "",
+        phone: data.phone ?? "",
+        company: data.company ?? "",
+        comment: data.comment ?? "",
+      });
       setStatus("sent");
       form.reset();
     } catch (err) {
@@ -70,11 +85,18 @@ export function LeadForm({
         <div className="form-grid two">
           <label>
             Имя
-            <input name="name" required disabled={sending} />
+            <input name="name" required disabled={sending} defaultValue={defaultName} />
           </label>
           <label>
             Телефон
-            <input name="phone" type="tel" required placeholder="+7" disabled={sending} />
+            <input
+              name="phone"
+              type="tel"
+              required
+              placeholder="+7"
+              disabled={sending}
+              defaultValue={defaultPhone}
+            />
           </label>
         </div>
       ) : (
@@ -85,23 +107,32 @@ export function LeadForm({
               name="name"
               required
               disabled={sending}
-              placeholder={variant === "request" ? "Как к вам обращаться" : undefined}
+              defaultValue={defaultName}
+              placeholder={variant === "request" || variant === "cart" ? "Как к вам обращаться" : undefined}
             />
           </label>
           <label>
             Телефон
-            <input name="phone" type="tel" required placeholder="+7" disabled={sending} />
+            <input
+              name="phone"
+              type="tel"
+              required
+              placeholder="+7"
+              disabled={sending}
+              defaultValue={defaultPhone}
+            />
           </label>
         </>
       )}
 
-      {(variant === "home" || variant === "request") && (
+      {(variant === "home" || variant === "request" || variant === "cart") && (
         <label>
           Компания / объект
           <input
             name="company"
             disabled={sending}
-            placeholder={variant === "request" ? "Необязательно" : undefined}
+            defaultValue={defaultCompany}
+            placeholder={variant === "request" || variant === "cart" ? "Необязательно" : undefined}
           />
         </label>
       )}
@@ -110,7 +141,7 @@ export function LeadForm({
         <label>
           {variant === "home"
             ? "Что нужно оснастить"
-            : variant === "request"
+            : variant === "request" || variant === "cart"
               ? "Комментарий"
               : "Сообщение"}
           <textarea
@@ -119,7 +150,7 @@ export function LeadForm({
             placeholder={
               variant === "home"
                 ? "Категории, количество, сроки"
-                : variant === "request"
+                : variant === "request" || variant === "cart"
                   ? "Количество, сроки, ТЗ"
                   : undefined
             }

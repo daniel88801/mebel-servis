@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LeadForm } from "@/components/LeadForm";
+import { PdConsentText } from "@/components/LegalConsent";
 import { RequestButton } from "@/components/RequestModal";
 import { company } from "@/data/catalog";
 import { MESSENGERS } from "@/data/contacts";
@@ -110,11 +111,7 @@ export default function ContactsPage() {
             }
             submitLabel="Отправить"
             okText="Сообщение отправлено. Ответим в рабочее время."
-            consent={
-              <>
-                Согласен с <Link href="/privacy">политикой конфиденциальности</Link>
-              </>
-            }
+            consent={<PdConsentText />}
           />
 
           <div className="map-block">

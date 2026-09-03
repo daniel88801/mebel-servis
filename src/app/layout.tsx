@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, Manrope } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RequestModalProvider } from "@/components/RequestModal";
+import { CartProvider } from "@/components/CartProvider";
 import { JsonLd, organizationSchema, websiteSchema } from "@/components/JsonLd";
 import { CallbackWidget } from "@/components/CallbackWidget";
 import { CookieNotice } from "@/components/CookieNotice";
@@ -54,14 +55,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />
         <RequestModalProvider>
-          <a className="skip" href="#content">
-            К содержанию
-          </a>
-          <Header />
-          {children}
-          <Footer />
-          <CallbackWidget />
-          <CookieNotice />
+          <CartProvider>
+            <a className="skip" href="#content">
+              К содержанию
+            </a>
+            <Header />
+            {children}
+            <Footer />
+            <CallbackWidget />
+            <CookieNotice />
+          </CartProvider>
         </RequestModalProvider>
         <Metrika />
       </body>

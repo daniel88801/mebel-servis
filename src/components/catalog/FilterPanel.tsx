@@ -175,7 +175,9 @@ export function FilterPanel({
             <li key={c.id}>
               <Link
                 href={`/catalog/${c.id}`}
-                className={activeCategory?.id === c.id ? "is-active" : ""}
+                className={`${c.id === "sale" ? "is-sale" : ""}${
+                  activeCategory?.id === c.id ? " is-active" : ""
+                }`.trim()}
               >
                 <span>{c.name}</span>
                 <span className="fcheck-count">{categoryCounts.get(c.id) ?? 0}</span>

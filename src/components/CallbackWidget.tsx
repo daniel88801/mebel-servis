@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { LeadForm } from "./LeadForm";
+import { PdConsentText } from "./LegalConsent";
 import { company } from "@/data/catalog";
 
 /** Плавающая кнопка звонка: у конкурентов она есть на всех страницах, у нас не было. */
@@ -59,7 +60,7 @@ export function CallbackWidget() {
             style={{ marginTop: 14 }}
             submitLabel="Жду звонка"
             okText="Заявка принята — перезвоним в рабочее время."
-            consent={<>Согласен на обработку персональных данных</>}
+            consent={<PdConsentText />}
           />
         </div>
       )}

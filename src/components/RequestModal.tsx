@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { LeadForm } from "./LeadForm";
+import { PdConsentText } from "./LegalConsent";
 
 type RequestModalContext = { open: (product?: string) => void };
 
@@ -57,7 +58,7 @@ export function RequestModalProvider({ children }: { children: React.ReactNode }
               style={{ marginTop: 16 }}
               submitLabel="Отправить"
               okText="Заявка принята. Мы свяжемся с вами в ближайшее рабочее время."
-              consent={<>Согласен на обработку персональных данных</>}
+              consent={<PdConsentText />}
             />
           </div>
         )}
