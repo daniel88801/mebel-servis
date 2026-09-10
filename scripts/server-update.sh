@@ -48,6 +48,18 @@ fi
 echo "web: 200 на 127.0.0.1:3000"
 docker compose ps --format '{{.Service}}: {{.Status}}'
 
-# Диска на сервере мало — чистим слои прошлых сборок.
+# На диске меньше двух гигабайт свободного, а образ весит около 900 МБ
+# (317 МБ — пререндер 837 страниц товаров, 62 МБ — фотографии каталога).
+# Поэтому держим ровно текущий образ. Откатиться можно повторным pull:
+# в реестре хранятся пять последних версий.
+echo "==> Чистка старых образов"
+repo="${IMAGE%%:*}"
+docker images --filter "reference=$repo" --format '{{.Repository}}:{{.Tag}}' \
+  | grep -v '<none>' | grep -vx "$IMAGE" \
+  | xargs -r docker rmi >/dev/null 2>&1 || true
+
 docker image prune -f >/dev/null
+docker builder prune -f >/dev/null 2>&1 || true
+
+echo "осталось образов сайта: $(docker images --filter "reference=$repo" -q | sort -u | wc -l)"
 df -h / | tail -1

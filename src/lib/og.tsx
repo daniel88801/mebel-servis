@@ -1,10 +1,31 @@
 import { ImageResponse } from "next/og";
+import sharp from "sharp";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { existsSync } from "node:fs";
 
 export const ogSize = { width: 1200, height: 630 };
-export const ogType = "image/png";
+export const ogType = "image/jpeg";
+
+/**
+ * ImageResponse умеет отдавать только PNG, а PNG без потерь для фотографии
+ * весит около мегабайта. Пережимаем в JPEG — та же картинка укладывается
+ * примерно в 150 КБ. Цветовую субдискретизацию не включаем: иначе медный
+ * акцент на тексте расползается цветной каймой.
+ */
+async function toJpeg(image: ImageResponse) {
+  const png = Buffer.from(await image.arrayBuffer());
+  const jpeg = await sharp(png)
+    .jpeg({ quality: 82, mozjpeg: true, chromaSubsampling: "4:4:4" })
+    .toBuffer();
+  return new Response(new Uint8Array(jpeg), {
+    headers: {
+      "Content-Type": ogType,
+      // Превью для конкретного адреса не меняется до следующей выкатки.
+      "Cache-Control": "public, max-age=31536000, immutable",
+    },
+  });
+}
 
 const fontsDir = join(process.cwd(), "public/og-fonts");
 const publicDir = join(process.cwd(), "public");
@@ -40,8 +61,8 @@ export async function ogScene({
   title: string;
 }) {
   const src = (await fileToDataUri(photo)) ?? (await fileToDataUri("/images/og/home.jpg"));
-  return new ImageResponse(
-    (
+  return toJpeg(
+    new ImageResponse(
       <div
         style={{
           width: 1200,
@@ -137,9 +158,9 @@ export async function ogScene({
             </div>
           </div>
         </div>
-      </div>
+      </div>,
+      { ...ogSize, fonts: await loadFonts() },
     ),
-    { ...ogSize, fonts: await loadFonts() },
   );
 }
 
@@ -156,11 +177,10 @@ export async function ogProduct({
   sku: string;
   price: string;
 }) {
-  const src =
-    (await fileToDataUri(photo)) ?? (await fileToDataUri("/images/og/catalog.jpg"));
+  const src = (await fileToDataUri(photo)) ?? (await fileToDataUri("/images/og/catalog.jpg"));
   const short = title.length > 72 ? `${title.slice(0, 70)}…` : title;
-  return new ImageResponse(
-    (
+  return toJpeg(
+    new ImageResponse(
       <div
         style={{
           width: 1200,
@@ -182,13 +202,7 @@ export async function ogProduct({
           }}
         >
           {src ? (
-            <img
-              src={src}
-              alt=""
-              width={540}
-              height={540}
-              style={{ objectFit: "contain" }}
-            />
+            <img src={src} alt="" width={540} height={540} style={{ objectFit: "contain" }} />
           ) : null}
         </div>
         <div
@@ -260,8 +274,8 @@ export async function ogProduct({
             Мебель-Сервис · Нижний Новгород
           </div>
         </div>
-      </div>
+      </div>,
+      { ...ogSize, fonts: await loadFonts() },
     ),
-    { ...ogSize, fonts: await loadFonts() },
   );
 }
