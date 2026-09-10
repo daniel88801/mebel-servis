@@ -1,0 +1,109 @@
+name: Сборка и деплой
+
+# Сервер слабый: одно ядро и 955 МБ памяти. Собираем образ здесь,
+# на сервер уходит только готовый слой из GHCR.
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ".gitignore"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
+env:
+  IMAGE: ghcr.io/${{ github.repository }}
+
+jobs:
+  build:
+    name: Собрать образ
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.meta.outputs.ref }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Тег образа
+        id: meta
+        run: echo "ref=${IMAGE,,}:sha-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Сборка и публикация
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.ref }}
+            ${{ env.IMAGE }}:latest
+          build-args: |
+            NEXT_PUBLIC_SITE_URL=${{ vars.NEXT_PUBLIC_SITE_URL || 'https://meb-srv.ru' }}
+            NEXT_PUBLIC_YANDEX_METRIKA_ID=${{ vars.NEXT_PUBLIC_YANDEX_METRIKA_ID }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Выкатить на сервер
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    environment:
+      name: production
+      url: https://meb-srv.ru
+    steps:
+      - name: Ключ доступа
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+      - name: Обновить сервер
+        env:
+          IMAGE_REF: ${{ needs.build.outputs.image }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HOST: ${{ secrets.SSH_HOST }}
+          USER_NAME: ${{ secrets.SSH_USER }}
+        run: |
+          # SSH к этому хосту рвётся примерно на каждом втором подключении,
+          # поэтому до пяти попыток.
+          for attempt in 1 2 3 4 5; do
+            ssh -i ~/.ssh/id_ed25519 \
+                -o StrictHostKeyChecking=accept-new \
+                -o ConnectTimeout=40 -o ServerAliveInterval=15 \
+                "$USER_NAME@$HOST" \
+                "cd /opt/mebel-servis \
+                 && git fetch --depth 1 origin main \
+                 && git reset --hard origin/main \
+                 && GHCR_TOKEN='$GHCR_TOKEN' GHCR_USER='${{ github.actor }}' \
+                    bash scripts/server-update.sh '$IMAGE_REF'" && exit 0
+            echo "::warning::обрыв связи, попытка $attempt из 5"
+            sleep 10
+          done
+          echo "::error::не удалось подключиться к серверу"
+          exit 1
+
+      - name: Проверка снаружи
+        run: |
+          for attempt in 1 2 3 4 5 6; do
+            code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 25 https://meb-srv.ru/ || echo 000)"
+            if [ "$code" = "200" ]; then echo "https://meb-srv.ru → 200"; exit 0; fi
+            echo "попытка $attempt: $code"
+            sleep 10
+          done
+          echo "::error::сайт не ответил 200"
+          exit 1

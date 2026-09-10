@@ -1,5 +1,9 @@
 services:
   web:
+    # Образ собирается в GitHub Actions и приезжает из GHCR: на сервере одно ядро
+    # и 955 МБ памяти, сборка там занимает минуты. Секция build оставлена для
+    # первого развёртывания и локального запуска — deploy.sh собирает на месте.
+    image: ${WEB_IMAGE:-mebel-servis-web}
     build:
       context: .
       args:

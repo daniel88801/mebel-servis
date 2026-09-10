@@ -22,3 +22,6 @@ data/*.db-*
 test-results/
 playwright-report/
 blob-report/
+
+# доступы к серверу — не коммитить
+serv.md
