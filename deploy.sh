@@ -6,6 +6,7 @@
 #   curl -fsSL https://raw.githubusercontent.com/daniel88801/mebel-servis/main/deploy.sh | bash
 #
 # Секреты берутся из окружения либо из уже существующего .env:
+#   SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, SMTP_FROM, LEAD_EMAIL_TO,
 #   TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, INBOX_PASSWORD, NEXT_PUBLIC_YANDEX_METRIKA_ID
 set -euo pipefail
 
@@ -76,6 +77,12 @@ val()  { local env_val="${!1:-}" old
 inbox="$(val INBOX_PASSWORD "$(head -c 18 /dev/urandom | base64 | tr -dc 'A-Za-z0-9')")"
 umask 077
 cat > .env <<ENV
+SMTP_HOST=$(val SMTP_HOST)
+SMTP_PORT=$(val SMTP_PORT 2525)
+SMTP_USER=$(val SMTP_USER)
+SMTP_PASSWORD=$(val SMTP_PASSWORD)
+SMTP_FROM=$(val SMTP_FROM)
+LEAD_EMAIL_TO=$(val LEAD_EMAIL_TO)
 TELEGRAM_BOT_TOKEN=$(val TELEGRAM_BOT_TOKEN)
 TELEGRAM_CHAT_ID=$(val TELEGRAM_CHAT_ID)
 INBOX_PASSWORD=$inbox
@@ -84,7 +91,7 @@ DOMAIN=$DOMAIN
 NEXT_PUBLIC_YANDEX_METRIKA_ID=$(val NEXT_PUBLIC_YANDEX_METRIKA_ID)
 ENV
 umask 022
-[ -n "$(val TELEGRAM_BOT_TOKEN)" ] || echo "TELEGRAM_BOT_TOKEN пуст — заявки уйдут только в /inbox и лог."
+[ -n "$(val SMTP_HOST)" ] || echo "SMTP не настроен — заявки останутся только в /inbox и логе."
 
 step "Сеть"
 if command -v ufw >/dev/null && ufw status | grep -q '^Status: active'; then

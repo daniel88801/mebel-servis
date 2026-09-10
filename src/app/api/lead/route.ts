@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sendToTelegram, staffAlert } from "@/lib/notify";
+import { notifyStaff, staffAlert } from "@/lib/notify";
 import { createLead } from "@/lib/store";
 import { clean as cleanField, looksLikePhone } from "@/lib/validate";
 
@@ -72,8 +72,11 @@ export async function POST(request: Request) {
     source: lead.source ?? "",
   });
 
-  const result = await sendToTelegram(staffText(saved));
-  if (!result.ok && result.reason === "telegram-error") {
+  const result = await notifyStaff({
+    subject: `Новая заявка ${saved.number} — Мебель-Сервис`,
+    html: staffText(saved),
+  });
+  if (!result.ok) {
     console.error("[lead] заявка", saved.number, "сохранена, уведомление не ушло");
   }
 
