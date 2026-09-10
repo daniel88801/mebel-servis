@@ -21,6 +21,8 @@ async function toJpeg(image: ImageResponse) {
   return new Response(new Uint8Array(jpeg), {
     headers: {
       "Content-Type": ogType,
+      // Краулеры соцсетей охотнее берут картинку с явно указанной длиной.
+      "Content-Length": String(jpeg.byteLength),
       // Превью для конкретного адреса не меняется до следующей выкатки.
       "Cache-Control": "public, max-age=31536000, immutable",
     },
