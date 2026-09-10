@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Todo, TodoBlock } from "@/components/Todo";
 import { RequestButton } from "@/components/RequestModal";
 import { company } from "@/data/catalog";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Доставка",
   description:
-    "Как мы отгружаем мебель: самовывоз с производства в Нижнем Новгороде, доставка по городу и области, отправка в регионы транспортными компаниями.",
-  alternates: { canonical: "/delivery" },
-};
+    "Самовывоз с производства на Гордеевской, 139Б в Нижнем Новгороде, доставка по городу и области, отправка металлической и ЛДСП-мебели по России транспортными компаниями.",
+  path: "/delivery",
+});
 
 export default function DeliveryPage() {
   return (

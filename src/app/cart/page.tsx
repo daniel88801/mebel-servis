@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { CartView } from "@/components/CartView";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Корзина заявки",
   description:
-    "Спецификация для коммерческого предложения: соберите позиции из каталога и отправьте заявку в ООО «Мебель-Сервис».",
+    "Спецификация для коммерческого предложения: соберите кровати, шкафы и мебель на каркасе и отправьте заявку в ООО «Мебель-Сервис», Нижний Новгород.",
+  path: "/cart",
   robots: { index: false },
-};
+});
 
 export default function CartPage() {
   return (

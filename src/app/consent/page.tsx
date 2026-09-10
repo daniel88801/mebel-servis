@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LEGAL_VERSION, OPERATOR } from "@/lib/legal";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Согласие на обработку персональных данных",
   description:
-    "Текст согласия на обработку персональных данных для заявок и кабинета ООО «Мебель-Сервис».",
-  alternates: { canonical: "/consent" },
-};
+    "Согласие на обработку персональных данных при заявке и регистрации кабинета заказчика ООО «Мебель-Сервис», Нижний Новгород, ул. Гордеевская, 139Б.",
+  path: "/consent",
+});
 
 export default function ConsentPage() {
   return (

@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LeadForm } from "@/components/LeadForm";
 import { PdConsentText } from "@/components/LegalConsent";
 import { Todo, TodoBlock } from "@/components/Todo";
 import { categories, company, products } from "@/data/catalog";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Оптом и на объект",
   description:
-    "Оптовые и комплексные поставки мебели для объектов: серийные партии, изготовление по ТЗ, расчёт сметы и оптовый прайс по запросу. Производство в Нижнем Новгороде.",
-  alternates: { canonical: "/wholesale" },
-};
+    "Оптовые партии с завода в Нижнем Новгороде: кровати, шкафы и мебель на каркасе под казармы, общежития и школы. Смета, ТЗ, закупки по 44-ФЗ и 223-ФЗ.",
+  path: "/wholesale",
+});
 
 const STEPS = [
   {

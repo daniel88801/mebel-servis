@@ -112,8 +112,11 @@ select {
 }
 
 .logo-mark {
-  width: 42px;
-  height: 42px;
+  width: 34px;
+  height: auto;
+  display: block;
+  flex-shrink: 0;
+  color: var(--ink);
 }
 
 .logo-text {
@@ -307,7 +310,8 @@ select {
 }
 
 .btn-ghost:hover {
-  background: var(--ink);
+  background: var(--copper);
+  border-color: var(--copper);
   color: var(--paper);
 }
 
@@ -344,6 +348,19 @@ select {
   height: 1.5px;
   background: var(--ink);
   margin: 4px auto;
+  transition:
+    0.16s transform,
+    0.16s opacity;
+}
+
+.burger[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+.burger[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+.burger[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-5.5px) rotate(-45deg);
 }
 
 /* Hero */
@@ -726,6 +743,7 @@ select {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 12px;
 }
 
@@ -1024,24 +1042,27 @@ textarea {
 
 .chip.on,
 .chip:hover {
-  background: var(--ink);
-  color: var(--white);
-  border-color: var(--ink);
+  background: var(--copper);
+  color: var(--paper);
+  border-color: var(--copper);
 }
 
 .page-hero {
-  padding: 48px 0 12px;
+  /* padding-block, не padding: иначе вместе с .wrap сбрасывает боковые поля */
+  padding-block: 40px 36px;
 }
 
 .page-hero h1 {
   font-size: clamp(2rem, 4vw, 3.2rem);
   letter-spacing: -0.03em;
-  margin-top: 8px;
+  line-height: 1.08;
+  margin-top: 20px;
 }
 
 .crumbs {
   color: var(--muted);
   font-size: 0.88rem;
+  line-height: 1.4;
 }
 
 .crumbs a:hover {
@@ -1096,7 +1117,8 @@ textarea {
 .product h1 {
   font-size: clamp(1.6rem, 3vw, 2.2rem);
   letter-spacing: -0.03em;
-  margin: 8px 0 12px;
+  line-height: 1.12;
+  margin: 12px 0 16px;
 }
 
 .spec {
@@ -1228,7 +1250,7 @@ textarea {
 }
 
 .footer a:hover {
-  color: #fff;
+  color: var(--copper);
 }
 
 .prose a,
@@ -1275,7 +1297,7 @@ textarea {
 }
 
 .footer h4 {
-  color: #f0efeb;
+  color: var(--copper);
   margin-bottom: 12px;
   font-size: 0.95rem;
 }
@@ -1547,7 +1569,8 @@ body:has(.auth-screen) .footer {
 .auth-panel h1 {
   font-size: clamp(1.8rem, 3vw, 2.6rem);
   letter-spacing: -0.04em;
-  margin: 10px 0 8px;
+  line-height: 1.08;
+  margin: 16px 0 10px;
 }
 
 .auth-lead {
@@ -1641,6 +1664,11 @@ body:has(.auth-screen) .footer {
 
 .text-page li {
   margin: 6px 0;
+}
+
+.text-page,
+.prose {
+  overflow-wrap: break-word;
 }
 
 .prose p + p {
@@ -1745,7 +1773,8 @@ body:has(.auth-screen) .footer {
      не влезало в 362px, поэтому на телефоне заголовки страниц мельче */
   h1 {
     font-size: clamp(1.5rem, 7vw, 2rem);
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
   /* Заголовок капслоком и описание рядом не помещаются — ставим в столбец */
   .section-head {
@@ -1771,6 +1800,8 @@ body:has(.auth-screen) .footer {
   }
   .hero h1 {
     font-size: clamp(1.9rem, 8.2vw, 2.6rem);
+    hyphens: none;
+    overflow-wrap: normal;
   }
   .hero p.lead {
     max-width: none;
@@ -1783,6 +1814,12 @@ body:has(.auth-screen) .footer {
   }
   .section {
     padding: 56px 0;
+  }
+  .page-hero {
+    padding-block: 28px 28px;
+  }
+  .page-hero h1 {
+    margin-top: 14px;
   }
   :root {
     --edge: 16px;
@@ -1799,10 +1836,13 @@ body:has(.auth-screen) .footer {
   }
   .hero-slide-nav {
     top: auto;
-    right: 16px;
-    left: 16px;
-    bottom: 14px;
+    right: 80px;
+    left: 72px;
+    bottom: 18px;
     align-items: center;
+  }
+  .split img {
+    min-height: 240px;
   }
 }
 
@@ -2136,17 +2176,19 @@ body:has(.auth-screen) .footer {
   width: 40px;
   height: 40px;
   border-radius: var(--radius);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #d5d4cf;
+  border: 1px solid var(--line);
+  color: var(--ink);
   transition:
     0.18s background,
-    0.18s color;
+    0.18s color,
+    0.18s border-color;
 }
 
-.messenger:hover {
+.messenger:hover,
+.footer a.messenger:hover {
   background: var(--copper);
   border-color: var(--copper);
-  color: #fff;
+  color: var(--paper);
 }
 
 .messenger svg {
@@ -2545,8 +2587,8 @@ body:has(.auth-screen) .footer {
 
 .pager-page:hover:not(.is-current),
 .pager-arrow:hover:not(:disabled) {
-  border-color: var(--ink);
-  color: var(--ink);
+  border-color: var(--copper);
+  color: var(--copper);
 }
 
 .pager-page.is-current {
@@ -2626,7 +2668,7 @@ body:has(.auth-screen) .footer {
 .drawer-foot {
   display: flex;
   gap: 10px;
-  padding: 16px 20px;
+  padding: 16px 72px;
   border-top: 1px solid var(--line);
   background: var(--white);
   flex-shrink: 0;
@@ -2642,6 +2684,10 @@ body:has(.auth-screen) .footer {
     animation-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+body:has(.drawer-backdrop) .callback-fab {
+  visibility: hidden;
 }
 
 @media (max-width: 980px) {
@@ -2714,6 +2760,45 @@ select:focus {
 
 .stage-line .mono {
   color: var(--copper);
+}
+
+.process-shots {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0 32px;
+}
+
+.process-shots li {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  background: var(--white);
+}
+
+.process-shots img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--line);
+}
+
+.process-shot-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+}
+
+.process-shot-foot b {
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+}
+
+.process-shot-foot span {
+  font-size: 0.82rem;
+  color: var(--muted);
 }
 
 /* Номенклатура: перечень направлений с числом позиций */
@@ -2840,6 +2925,14 @@ select:focus {
   background-position: center;
 }
 
+.adv-photo .section-head {
+  border-bottom-color: rgba(242, 241, 237, 0.22);
+}
+
+.adv-photo .section-head h2 {
+  color: var(--paper);
+}
+
 .adv-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2870,6 +2963,9 @@ select:focus {
   .stage-line {
     grid-template-columns: 1fr 1fr;
   }
+  .process-shots {
+    grid-template-columns: 1fr 1fr;
+  }
   .nomen {
     grid-template-columns: 1fr 1fr;
   }
@@ -2884,7 +2980,8 @@ select:focus {
 
 @media (max-width: 640px) {
   .stage-line,
-  .nomen {
+  .nomen,
+  .process-shots {
     grid-template-columns: 1fr;
   }
 }
@@ -3168,6 +3265,11 @@ select:focus {
   }
   .cutouts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    background: transparent;
+    gap: 8px;
+  }
+  .cutout {
+    border: 1px solid var(--line);
   }
   .band-list a {
     grid-template-columns: 44px 1fr auto;
@@ -3326,7 +3428,8 @@ select:focus {
 }
 
 .work:hover .work-btn {
-  background: var(--ink);
+  background: var(--copper);
+  border-color: var(--copper);
   color: var(--paper);
 }
 

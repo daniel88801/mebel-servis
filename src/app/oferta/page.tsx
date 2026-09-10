@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LEGAL_VERSION, OPERATOR } from "@/lib/legal";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Оферта для юридических лиц и ИП",
   description:
-    "Публичная оферта ООО «Мебель-Сервис»: заявка с сайта, коммерческое предложение и счёт. Не розничная продажа.",
-  alternates: { canonical: "/oferta" },
-};
+    "Публичная оферта ООО «Мебель-Сервис» для юрлиц и ИП: заявка с сайта, коммерческое предложение и счёт на мебель с производства в Нижнем Новгороде. Не розница.",
+  path: "/oferta",
+});
 
 export default function OfertaPage() {
   return (

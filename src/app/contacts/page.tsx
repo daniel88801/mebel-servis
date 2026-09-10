@@ -1,21 +1,17 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LeadForm } from "@/components/LeadForm";
 import { PdConsentText } from "@/components/LegalConsent";
 import { RequestButton } from "@/components/RequestModal";
 import { company } from "@/data/catalog";
 import { MESSENGERS } from "@/data/contacts";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Контакты",
   description:
-    "Контакты ООО «Мебель-Сервис»: Нижний Новгород, ул. Гордеевская, 139Б. Телефоны +7 (920) 005-01-10, +7 (930) 811-73-95.",
-  alternates: { canonical: "/contacts" },
-  openGraph: {
-    title: "Контакты — Мебель-Сервис",
-    description: "Нижний Новгород, ул. Гордеевская, 139Б. Тел. +7 (920) 005-01-10.",
-  },
-};
+    "ООО «Мебель-Сервис», Нижний Новгород, ул. Гордеевская, 139Б. Тел. +7 (920) 005-01-10 и +7 (930) 811-73-95. Пн–пт 9:00–17:00, заявки на поставку мебели.",
+  path: "/contacts",
+});
 
 /**
  * Карта ищет адрес строкой, а не ставит метку по координатам: координаты в репозитории

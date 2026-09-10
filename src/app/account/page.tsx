@@ -1,16 +1,19 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { LogoutButton } from "@/components/LogoutButton";
 import { ProfileForm } from "@/components/ProfileForm";
 import { getCurrentUser } from "@/lib/auth";
 import { money } from "@/lib/format";
+import { pageMeta } from "@/lib/seo";
 import { listOrders, ORDER_STATUS } from "@/lib/store";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Кабинет",
-  robots: { index: false },
-};
+  description:
+    "Кабинет заказчика ООО «Мебель-Сервис»: история заявок, заказы и профиль. Металлическая и ЛДСП-мебель с собственного производства в Нижнем Новгороде.",
+  path: "/account",
+  robots: { index: false, follow: true },
+});
 
 export const dynamic = "force-dynamic";
 

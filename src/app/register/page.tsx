@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { AuthForm } from "@/components/AuthForm";
 import { AuthScreen } from "@/components/AuthScreen";
 import { getCurrentUser } from "@/lib/auth";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Регистрация",
+  description:
+    "Регистрация кабинета заказчика ООО «Мебель-Сервис»: сохраняйте заявки на металлическую мебель для казарм, общежитий и школ с завода в Нижнем Новгороде.",
+  path: "/register",
   robots: { index: false },
-};
+});
 
 export default async function RegisterPage({
   searchParams,

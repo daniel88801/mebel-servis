@@ -1,16 +1,16 @@
 import { Suspense } from "react";
-import type { Metadata } from "next";
 import { CatalogBrowser } from "@/components/catalog/CatalogBrowser";
 import { categories, categoryCounts, products, toCardData } from "@/data/catalog";
+import { pageMeta } from "@/lib/seo";
 
 const cards = products.map(toCardData);
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Каталог",
   description:
-    "Каталог: армейская мебель, металлические кровати, мебель на металлокаркасе, раскладная ЛДСП, мебель для учащихся, рабочих и общежитий. Фильтры по цене, габаритам, нагрузке и покрытию.",
-  alternates: { canonical: "/catalog" },
-};
+    "Каталог завода в Нижнем Новгороде: армейские кровати, металлические шкафы, мебель на каркасе и ЛДСП для общежитий, школ и гостиниц. Фильтры по размерам и нагрузке.",
+  path: "/catalog",
+});
 
 export default function CatalogPage() {
   return (

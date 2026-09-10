@@ -48,7 +48,6 @@ export const metadata: Metadata = {
     title: "Мебель-Сервис — производство мебели для объектов",
     description:
       "Армейская мебель, металлические кровати, металлокаркас и ЛДСП. Серийные поставки из Нижнего Новгорода.",
-    images: ["/images/og.png"],
   },
   twitter: { card: "summary_large_image" },
 };

@@ -1,13 +1,16 @@
-import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { AuthForm } from "@/components/AuthForm";
 import { AuthScreen } from "@/components/AuthScreen";
 import { getCurrentUser } from "@/lib/auth";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Вход в кабинет",
+  description:
+    "Вход в кабинет заказчика ООО «Мебель-Сервис»: заявки и заказы на металлическую и ЛДСП-мебель для объектов с производства в Нижнем Новгороде.",
+  path: "/login",
   robots: { index: false },
-};
+});
 
 export default async function LoginPage({
   searchParams,

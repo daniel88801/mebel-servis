@@ -1,15 +1,18 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { InboxLogin } from "@/components/InboxLogin";
 import { InboxLogout } from "@/components/InboxLogout";
 import { hasInboxSession, inboxConfigured } from "@/lib/inbox";
+import { pageMeta } from "@/lib/seo";
 import { DELIVERY_LABEL, listRecentLeads, listRecentOrders, ORDER_STATUS } from "@/lib/store";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Служебная лента",
+  description:
+    "Служебная лента заявок и заказов ООО «Мебель-Сервис». Доступ только для сотрудников производства металлической и ЛДСП-мебели в Нижнем Новгороде.",
+  path: "/inbox",
   robots: { index: false, follow: false },
-};
+});
 
 export const dynamic = "force-dynamic";
 

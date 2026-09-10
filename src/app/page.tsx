@@ -13,6 +13,15 @@ import {
   productsByCategory,
   toCardData,
 } from "@/data/catalog";
+import { pageMeta } from "@/lib/seo";
+
+export const metadata = pageMeta({
+  title: "Мебель-Сервис — производство мебели для объектов, Нижний Новгород",
+  description:
+    "Завод в Нижнем Новгороде: кровати по ГОСТ, металлические шкафы, мебель на каркасе и ЛДСП для казарм, общежитий, школ и гостиниц. Цех 4 000+ м².",
+  path: "/",
+  absoluteTitle: true,
+});
 
 /** По одной первой позиции из каждого раздела, максимум восемь. */
 const hits = categories
@@ -190,7 +199,7 @@ export default function HomePage() {
           <div className="wrap split">
             <Image
               src="/images/production.jpg"
-              alt="Металлообработка и корпусное производство"
+              alt="Сварка металлокаркаса полуавтоматом MIG"
               width={1152}
               height={864}
               sizes="(max-width: 980px) 100vw, 50vw"

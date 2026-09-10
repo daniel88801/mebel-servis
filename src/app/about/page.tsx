@@ -1,22 +1,17 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { LeadForm } from "@/components/LeadForm";
 import { PdConsentText } from "@/components/LegalConsent";
 import { ClientIcons } from "@/components/ClientIcons";
 import { categories, categoryCounts, company, products } from "@/data/catalog";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "О компании",
   description:
-    "ООО «Мебель-Сервис», Нижний Новгород. Производственный комплекс более 4 000 м², полный цикл от металлообработки до сборки. Мебель для военных объектов, общежитий, учебных и социальных учреждений.",
-  alternates: { canonical: "/about" },
-  openGraph: {
-    title: "О компании — Мебель-Сервис",
-    description:
-      "Производственная компания из Нижнего Новгорода. Комплекс более 4 000 м², серийные поставки под ТЗ.",
-  },
-};
+    "ООО «Мебель-Сервис» в Нижнем Новгороде: цех 4 000+ м², лазер, сварка, порошковая окраска и ЛДСП. Серийная мебель для казарм, общежитий, школ и гостиниц.",
+  path: "/about",
+});
 
 const STAGES = [
   "Заготовка и раскрой металла",
@@ -26,6 +21,33 @@ const STAGES = [
   "Сборка и комплектация",
   "Контроль и упаковка",
 ];
+
+const PROCESS_SHOTS = [
+  {
+    src: "/images/production-laser.jpg",
+    alt: "Лазерный раскрой листовой стали",
+    title: "Раскрой",
+    note: "оптоволоконный лазер",
+  },
+  {
+    src: "/images/production.jpg",
+    alt: "Сварка квадратной трубы металлокаркаса",
+    title: "Сварка",
+    note: "полуавтомат MIG",
+  },
+  {
+    src: "/images/production-press.jpg",
+    alt: "Гибка профильной трубы на прессе",
+    title: "Гибка",
+    note: "пресс и оснастка",
+  },
+  {
+    src: "/images/production-beds.jpg",
+    alt: "Зачистка сварного шва болгаркой",
+    title: "Зачистка",
+    note: "подготовка к окраске",
+  },
+] as const;
 
 const CLIENTS = [
   {
@@ -97,11 +119,11 @@ export default function AboutPage() {
         <h1>О компании</h1>
       </div>
 
-      <section className="section" style={{ paddingTop: 12 }}>
+      <section className="section" style={{ paddingTop: 4 }}>
         <div className="wrap split">
           <Image
             src="/images/production-beds.jpg"
-            alt="Сборка металлических кроватей в производственном цехе"
+            alt="Зачистка сварного шва болгаркой на металлокаркасе"
             width={1152}
             height={864}
             sizes="(max-width: 980px) 100vw, 50vw"
@@ -171,6 +193,24 @@ export default function AboutPage() {
               <li key={stage}>
                 <span className="mono">{String(i + 1).padStart(2, "0")}</span>
                 {stage}
+              </li>
+            ))}
+          </ul>
+
+          <ul className="process-shots">
+            {PROCESS_SHOTS.map((shot) => (
+              <li key={shot.src}>
+                <Image
+                  src={shot.src}
+                  alt={shot.alt}
+                  width={1152}
+                  height={864}
+                  sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 25vw"
+                />
+                <div className="process-shot-foot">
+                  <b>{shot.title}</b>
+                  <span>{shot.note}</span>
+                </div>
               </li>
             ))}
           </ul>

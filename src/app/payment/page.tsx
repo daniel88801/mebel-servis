@@ -1,15 +1,15 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Todo, TodoBlock } from "@/components/Todo";
 import { RequestButton } from "@/components/RequestModal";
 import { company } from "@/data/catalog";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Оплата",
   description:
-    "Оплата для юридических лиц и бюджетных учреждений: счёт, безналичный расчёт, работа по 44-ФЗ и 223-ФЗ. Реквизиты ООО «Мебель-Сервис».",
-  alternates: { canonical: "/payment" },
-};
+    "Счёт и безналичный расчёт для юрлиц и бюджета, УПД, работа по 44-ФЗ и 223-ФЗ. Реквизиты ООО «Мебель-Сервис», мебельное производство в Нижнем Новгороде.",
+  path: "/payment",
+});
 
 const REQUISITES: [string, string][] = [
   ["Компания", company.legal],

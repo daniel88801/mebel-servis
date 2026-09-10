@@ -17,12 +17,14 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
 
 export const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": ["Organization", "LocalBusiness"],
   name: company.legal,
   alternateName: company.name,
   url: SITE_URL,
-  logo: absolute("/favicon.svg"),
+  logo: absolute("/logo.svg"),
   image: absolute("/images/og.png"),
+  description:
+    "Производство металлической и ЛДСП-мебели для казарм, общежитий, школ и гостиниц. Собственный цех в Нижнем Новгороде.",
   telephone: company.phones,
   email: company.email,
   taxID: company.inn,
@@ -30,11 +32,18 @@ export const organizationSchema = {
   address: {
     "@type": "PostalAddress",
     addressCountry: "RU",
+    addressRegion: "Нижегородская область",
     addressLocality: company.city,
     streetAddress: "ул. Гордеевская, 139Б",
     postalCode: "603116",
   },
   openingHours: "Mo-Fr 09:00-17:00",
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    opens: "09:00",
+    closes: "17:00",
+  },
 };
 
 export const websiteSchema = {

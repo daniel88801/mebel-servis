@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { LEGAL_VERSION, OPERATOR } from "@/lib/legal";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Политика конфиденциальности",
   description:
-    "Политика обработки персональных данных посетителей сайта ООО «Мебель-Сервис» (ИНН 5257204453).",
-  alternates: { canonical: "/privacy" },
-};
+    "Политика ООО «Мебель-Сервис» (ИНН 5257204453, Нижний Новгород): какие данные собирает сайт мебельного производства, зачем, сколько хранит и как отозвать согласие.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

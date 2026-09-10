@@ -1,15 +1,17 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
 import { money, productHref } from "@/lib/format";
+import { pageMeta } from "@/lib/seo";
 import { DELIVERY_LABEL, getOrder, ORDER_STATUS } from "@/lib/store";
 
-export const metadata: Metadata = {
+export const metadata = pageMeta({
   title: "Заказ",
-  robots: { index: false },
-};
+  description:
+    "Карточка заказа в кабинете ООО «Мебель-Сервис». Страница доступна только владельцу заявки на металлическую и ЛДСП-мебель из Нижнего Новгорода.",
+  robots: { index: false, follow: true },
+});
 
 export const dynamic = "force-dynamic";
 

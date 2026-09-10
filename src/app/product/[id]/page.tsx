@@ -24,15 +24,64 @@ export function generateStaticParams() {
   return products.map((p) => ({ id: p.id }));
 }
 
+function clipMeta(text: string, max = 170) {
+  const t = text.replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max);
+  const at = cut.lastIndexOf(" ");
+  const body = (at > max - 40 ? cut.slice(0, at) : cut).replace(/[.,;:\s—–-]+$/, "");
+  return `${body}…`;
+}
+
+function productMetaTitle(product: Product) {
+  const sku = product.sku.trim();
+  if (!sku || product.name.toLowerCase().includes(sku.toLowerCase())) return product.name;
+  return `${product.name} — ${sku}`;
+}
+
+function productMetaDescription(product: Product) {
+  const price = product.price == null ? "цена по запросу" : `от ${money(product.price)}`;
+  const bits: string[] = [`${product.name} (${product.sku})`];
+  const add = (value?: string) => {
+    const v = value?.replace(/\.$/, "").trim();
+    if (!v) return;
+    if (bits.join(" ").toLowerCase().includes(v.toLowerCase())) return;
+    bits.push(v);
+  };
+  if (product.sizes) add(`${product.sizes} мм`);
+  add(product.material);
+  add(product.gost);
+  if (product.load != null) add(`нагрузка до ${product.load} кг`);
+  if (product.coating) add(`покрытие ${product.coating}`);
+  add(price);
+  bits.push("Производство в Нижнем Новгороде, опт и объекты");
+  return clipMeta(`${bits.join(". ")}.`);
+}
+
+function productImageUrl(image: string) {
+  return /^https?:\/\//i.test(image) ? image : absolute(image);
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = productById(decodeURIComponent((await params).id));
   if (!product) return { title: "Товар не найден" };
-  const price = product.price == null ? "цена по запросу" : `от ${money(product.price)}`;
+  const title = productMetaTitle(product);
+  const description = productMetaDescription(product);
+  const url = absolute(productHref(product.id));
   return {
-    title: `${product.name} — ${product.sku}`,
-    description: `${product.name} (${product.sku}). ${product.sizes ? `Габариты ${product.sizes} мм. ` : ""}${price}.`,
-    openGraph: { images: [product.image] },
+    title,
+    description,
     alternates: { canonical: productHref(product.id) },
+    robots: { index: true, follow: true },
+    openGraph: {
+      title,
+      description,
+      url,
+      locale: "ru_RU",
+      siteName: company.name,
+      type: "website",
+    },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
@@ -166,10 +215,12 @@ export default async function ProductPage({ params }: Props) {
     "@type": "Product",
     name: product.name,
     sku: product.sku,
-    image: absolute(product.image),
+    mpn: product.sku,
+    image: productImageUrl(product.image),
     description: product.desc ?? product.name,
     category: category?.name,
     brand: { "@type": "Brand", name: company.name },
+    manufacturer: { "@type": "Organization", name: company.legal },
     ...(product.gost
       ? {
           additionalProperty: [
@@ -186,9 +237,10 @@ export default async function ProductPage({ params }: Props) {
       priceCurrency: "RUB",
       availability: "https://schema.org/InStock",
       seller: { "@type": "Organization", name: company.legal },
-      ...(product.price == null
-        ? {}
-        : { price: product.price, priceValidUntil: `${new Date().getFullYear() + 1}-12-31` }),
+      ...(product.price == null ? {} : { price: product.price }),
+      ...(product.category === "sale"
+        ? { priceValidUntil: new Date().toISOString().slice(0, 10) }
+        : {}),
     },
   };
 
@@ -208,7 +260,12 @@ export default async function ProductPage({ params }: Props) {
             },
           ]
         : []),
-      { "@type": "ListItem", position: category ? 4 : 3, name: product.name },
+      {
+        "@type": "ListItem",
+        position: category ? 4 : 3,
+        name: product.name,
+        item: absolute(productHref(product.id)),
+      },
     ],
   };
 
