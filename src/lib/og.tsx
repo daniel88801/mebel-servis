@@ -15,8 +15,10 @@ export const ogType = "image/jpeg";
  */
 async function toJpeg(image: ImageResponse) {
   const png = Buffer.from(await image.arrayBuffer());
+  // Строго baseline, без прогрессивной развёртки: mozjpeg включает её по умолчанию,
+  // а краулеры соцсетей такую картинку скачивают, но в превью не показывают.
   const jpeg = await sharp(png)
-    .jpeg({ quality: 82, mozjpeg: true, chromaSubsampling: "4:4:4" })
+    .jpeg({ quality: 82, progressive: false, chromaSubsampling: "4:4:4" })
     .toBuffer();
   return new Response(new Uint8Array(jpeg), {
     headers: {
