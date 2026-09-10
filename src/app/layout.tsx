@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Manrope } from "next/font/google";
+import { IBM_Plex_Mono, Manrope, Unbounded } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { RequestModalProvider } from "@/components/RequestModal";
@@ -15,6 +15,13 @@ const manrope = Manrope({
   subsets: ["cyrillic", "latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const unbounded = Unbounded({
+  subsets: ["cyrillic", "latin"],
+  weight: ["700", "800"],
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -50,7 +57,7 @@ export const viewport: Viewport = { themeColor: "#161814" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${manrope.variable} ${plexMono.variable}`}>
+    <html lang="ru" className={`${manrope.variable} ${unbounded.variable} ${plexMono.variable}`}>
       <body>
         <JsonLd data={organizationSchema} />
         <JsonLd data={websiteSchema} />

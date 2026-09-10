@@ -7,6 +7,15 @@ import { AddToCartButton } from "./AddToCartButton";
 export function ProductCard({ product }: { product: ProductCardData }) {
   const href = productHref(product.id);
   const sale = product.category === "sale";
+  // Строка характеристик под названием: габариты, цвет, нагрузка — как в макете
+  const spec = [
+    product.sizes,
+    product.colorTags?.[0] ?? product.colors?.[0],
+    product.load ? `до ${product.load} кг` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
     <article className={`card${sale ? " card-sale" : ""}`}>
       <Link href={href} className="card-img-wrap">
@@ -15,37 +24,37 @@ export function ProductCard({ product }: { product: ProductCardData }) {
             src={product.image}
             alt={product.name}
             width={480}
-            height={480}
+            height={600}
             sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 25vw"
           />
         </div>
-        {sale ? (
-          <span className="badge badge-sale">Распродажа</span>
-        ) : (
-          product.badge && <span className="badge">{product.badge}</span>
-        )}
       </Link>
       <div className="card-body">
         <span className="mono card-sku">{product.sku}</span>
         <h3>
           <Link href={href}>{product.name}</Link>
         </h3>
-        {product.sizes && <p className="note">{product.sizes}</p>}
-        <div className="price">
-          {product.price == null ? (
-            "по запросу"
-          ) : (
-            <>
-              <small>от</small> {money(product.price)}
-            </>
+        {spec && <p className="card-spec">{spec}</p>}
+        <div className="card-badges">
+          {sale && <span className="badge badge-sale">Распродажа</span>}
+          {!sale && product.gost && <span className="badge badge-gost">{product.gost}</span>}
+          {!sale && !product.gost && product.badge && (
+            <span className="badge">{product.badge}</span>
           )}
         </div>
-        <div className="product-actions">
-          <Link className="btn btn-ghost btn-sm" href={href}>
-            Подробнее
-          </Link>
+        <div className="card-foot">
+          <div className="price">
+            {product.price == null ? (
+              "по запросу"
+            ) : (
+              <>
+                <small>от</small>
+                {money(product.price)}
+              </>
+            )}
+          </div>
           <AddToCartButton
-            className="btn btn-copper btn-sm"
+            className="btn btn-ghost btn-sm"
             product={{
               id: product.id,
               sku: product.sku,

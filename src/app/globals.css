@@ -1,19 +1,23 @@
 :root {
-  --paper: #efe8d8;
-  --paper-2: #e4dcc8;
-  --ink: #161814;
-  --ink-2: #3a3d36;
-  --muted: #6c7066;
-  --line: #d2c9b4;
-  --white: #faf7f0;
-  --olive: #4a5530;
-  --olive-2: #6a7844;
+  /* Брутализм: бетон вместо тёплой бумаги, чернила вместо угля */
+  --paper: #f2f1ed;
+  --paper-2: #e8e7e3;
+  --ink: #111111;
+  --ink-2: #2b2a27;
+  --muted: #55534e;
+  --line: #111111;
+  --line-soft: rgba(17, 17, 17, 0.18);
+  --white: #ffffff;
+  /* Медь — единственный коммерческий акцент, жёлтый — маркировка (ГОСТ, нагрузка) */
   --copper: #c45c32;
   --copper-2: #a04424;
-  --steel: #3e484c;
-  --shadow: 0 24px 60px rgba(22, 24, 20, 0.1);
-  --radius: 14px;
-  --max: 1180px;
+  --signal: #ffd400;
+  /* Теней нет; жёсткая, без размытия, живёт только на главном действии */
+  --shadow: none;
+  --shadow-hard: 4px 4px 0 var(--copper);
+  --radius: 0;
+  --max: 1560px;
+  --edge: 40px;
   --header: 76px;
 }
 
@@ -27,6 +31,14 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Дисплейное лицо — только на заголовках; тело текста остаётся на Manrope */
+h1,
+h2,
+.section-head h2 {
+  font-family: var(--font-display), Unbounded, var(--font-sans), sans-serif;
+  letter-spacing: -0.03em;
 }
 
 body {
@@ -56,8 +68,8 @@ select {
 }
 
 .wrap {
-  width: min(var(--max), calc(100% - 40px));
-  margin-inline: auto;
+  width: 100%;
+  padding-inline: var(--edge);
 }
 
 .mono {
@@ -80,8 +92,7 @@ select {
   height: var(--header);
   display: flex;
   align-items: center;
-  background: rgba(239, 232, 216, 0.88);
-  backdrop-filter: blur(16px);
+  background: var(--paper);
   border-bottom: 1px solid var(--line);
 }
 
@@ -89,8 +100,8 @@ select {
   display: flex;
   align-items: center;
   gap: 28px;
-  width: min(var(--max), calc(100% - 40px));
-  margin-inline: auto;
+  width: 100%;
+  padding-inline: var(--edge);
 }
 
 .logo {
@@ -124,9 +135,12 @@ select {
 
 .nav {
   display: flex;
-  gap: 26px;
+  gap: 22px;
   margin-left: 8px;
-  font-size: 0.95rem;
+  font-family: var(--font-mono), "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .nav a {
@@ -179,7 +193,7 @@ select {
   display: grid;
   place-items: center;
   color: var(--ink);
-  border-radius: 999px;
+  border-radius: var(--radius);
 }
 
 .header-icon:hover,
@@ -204,7 +218,7 @@ select {
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
-  border-radius: 99px;
+  border-radius: var(--radius);
   background: var(--copper);
   color: #fff;
   font-size: 0.62rem;
@@ -218,7 +232,7 @@ select {
   font-weight: 600;
   white-space: nowrap;
   padding: 8px 14px;
-  border-radius: 999px;
+  border-radius: var(--radius);
   border: 1px solid transparent;
   transition:
     0.18s background,
@@ -235,43 +249,71 @@ select {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 0;
+  border: 2px solid var(--ink);
   cursor: pointer;
-  border-radius: 999px;
-  padding: 12px 20px;
-  font-weight: 650;
+  border-radius: var(--radius);
+  height: 48px;
+  padding: 0 22px;
+  font-family: var(--font-mono), "IBM Plex Mono", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   transition:
-    0.18s transform,
-    0.18s background,
-    0.18s color;
+    90ms background-color linear,
+    90ms color linear,
+    90ms transform linear,
+    90ms box-shadow linear;
 }
 
-.btn:hover {
-  transform: translateY(-1px);
+/* Ничего не поднимается над плоскостью: наведение — инверсия, нажатие — сдвиг */
+.btn:active {
+  transform: translate(2px, 2px);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 2px;
 }
 
 .btn-primary {
   background: var(--ink);
   color: var(--white);
+  box-shadow: var(--shadow-hard);
 }
 
 .btn-primary:hover {
-  background: #000;
+  background: var(--copper);
+  border-color: var(--copper);
+  box-shadow: 0 0 0 var(--copper);
+  transform: translate(4px, 4px);
 }
 
 .btn-copper {
   background: var(--copper);
+  border-color: var(--copper);
   color: #fff;
 }
 
 .btn-copper:hover {
-  background: var(--copper-2);
+  background: var(--ink);
+  border-color: var(--ink);
 }
 
 .btn-ghost {
   background: transparent;
   color: var(--ink);
   border: 1px solid var(--ink);
+}
+
+.btn-ghost:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn-ghost-light:hover {
+  background: #fff;
+  color: var(--ink);
 }
 
 .btn-ghost-light {
@@ -281,8 +323,9 @@ select {
 }
 
 .btn-sm {
-  padding: 9px 16px;
-  font-size: 0.88rem;
+  height: 36px;
+  padding: 0 14px;
+  font-size: 12px;
 }
 
 .burger {
@@ -290,7 +333,7 @@ select {
   width: 42px;
   height: 42px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--radius);
   background: var(--white);
   cursor: pointer;
 }
@@ -308,8 +351,9 @@ select {
   position: relative;
   min-height: min(88vh, 820px);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-items: end;
-  color: #f6f1e6;
+  color: #f7f6f3;
   overflow: hidden;
 }
 
@@ -350,7 +394,7 @@ select {
 }
 
 .hero-slide-label {
-  color: #e6ddc8;
+  color: #e3e2de;
   text-shadow: 0 1px 12px rgba(16, 18, 14, 0.45);
 }
 
@@ -365,16 +409,16 @@ select {
   height: 36px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(246, 241, 230, 0.28);
-  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius);
   background: rgba(22, 24, 18, 0.35);
-  color: #f6f1e6;
+  color: #f7f6f3;
   cursor: pointer;
 }
 
 .hero-slide-btn:hover {
   background: rgba(22, 24, 18, 0.55);
-  border-color: rgba(246, 241, 230, 0.5);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .hero-slide-btn svg {
@@ -398,8 +442,8 @@ select {
   height: 8px;
   padding: 0;
   border: 0;
-  border-radius: 99px;
-  background: rgba(246, 241, 230, 0.38);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.16);
   cursor: pointer;
 }
 
@@ -414,9 +458,8 @@ select {
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(16, 18, 14, 0.12) 0%, rgba(16, 18, 14, 0.62) 78%),
-    linear-gradient(90deg, rgba(22, 24, 18, 0.48), transparent 52%);
+  /* Плоский скрим вместо двух мягких градиентов: чёткая граница читаемости */
+  background: linear-gradient(90deg, rgba(17, 17, 17, 0.82) 0%, rgba(17, 17, 17, 0.72) 46%, rgba(17, 17, 17, 0.18) 100%);
 }
 
 .hero-inner {
@@ -435,7 +478,7 @@ select {
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
-  color: #d7c8a4;
+  color: #cfcec9;
   margin-bottom: 18px;
   max-width: 100%;
 }
@@ -448,17 +491,19 @@ select {
 }
 
 .hero h1 {
-  font-size: clamp(2.2rem, 5vw, 4.4rem);
-  line-height: 1.02;
-  letter-spacing: -0.04em;
-  max-width: 14ch;
-  font-weight: 700;
+  font-family: var(--font-display), Unbounded, var(--font-sans), sans-serif;
+  font-size: clamp(2.4rem, 6.4vw, 6rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  max-width: 16ch;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 .hero p.lead {
   max-width: min(46ch, 100%);
   margin-top: 22px;
-  color: #e6ddc8;
+  color: #e3e2de;
   font-size: 1.08rem;
 }
 
@@ -480,38 +525,50 @@ select {
   gap: 28px;
   margin-top: 48px;
   padding-top: 28px;
-  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.32);
 }
 
 .hero-stats b {
   display: block;
+  font-family: var(--font-mono), "IBM Plex Mono", monospace;
+  font-variant-numeric: tabular-nums;
   font-size: 1.7rem;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
 
 .hero-stats span {
-  color: #cfc5ad;
+  color: #cfcec9;
   font-size: 0.88rem;
 }
 
 /* Sections */
+/* Секции разделены линейкой, как полосы в макете, а не пустотой */
 .section {
-  padding: 88px 0;
+  padding: 56px 0 64px;
+  border-top: 1px solid var(--line);
+}
+
+.section:first-of-type {
+  border-top: 0;
 }
 
 .section-head {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: end;
   gap: 24px;
-  margin-bottom: 36px;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
 }
 
 .section-head h2 {
-  font-size: clamp(1.7rem, 3vw, 2.5rem);
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  max-width: 16ch;
+  font-size: clamp(1.7rem, 3.2vw, 2.8rem);
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  max-width: 18ch;
+  text-transform: uppercase;
 }
 
 .section-head p {
@@ -520,17 +577,20 @@ select {
 }
 
 /* Categories */
+/* Зазор в 1px на фоне линии даёт волосяную сетку без рамок у каждой плитки */
 .cats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
 }
 
 .cat {
   position: relative;
   overflow: hidden;
   border-radius: var(--radius);
-  color: #f4efe4;
+  color: #f4f3ef;
   min-height: 200px;
   height: 210px;
 }
@@ -539,44 +599,54 @@ select {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: 0.5s transform;
-}
-
-.cat:hover img {
-  transform: scale(1.05);
 }
 
 .cat::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 30%, rgba(16, 18, 14, 0.78));
+  background: rgba(17, 17, 17, 0.32);
 }
 
 .cat-body {
   position: absolute;
-  inset: auto 18px 18px 18px;
+  inset: auto 0 0 0;
   z-index: 1;
+  background: var(--ink);
+  padding: 12px 14px;
+  transition: 90ms background-color linear;
+}
+
+.cat:hover .cat-body {
+  background: var(--copper);
 }
 
 .cat-body h3 {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 
 .cat-body span {
   display: block;
   margin-top: 4px;
-  color: #d8cdb4;
-  font-size: 0.86rem;
+  color: #cfcec9;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .cat-sale {
-  box-shadow: 0 0 0 2px var(--copper);
+  outline: 2px solid var(--copper);
+  outline-offset: -2px;
 }
 
 .cat-sale::after {
-  background: linear-gradient(180deg, rgba(196, 92, 50, 0.22) 0%, rgba(16, 18, 14, 0.82) 100%);
+  background: rgba(196, 92, 50, 0.28);
+}
+
+.cat-sale .cat-body {
+  background: var(--copper);
 }
 
 .cat .badge-sale {
@@ -586,14 +656,16 @@ select {
 /* Cards / products */
 .grid-3 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
+/* minmax(0, 1fr): моно-капслок на кнопках в карточке шире прежнего,
+   и колонка на 1fr раздувалась под его минимальную ширину */
 .grid-4 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
 }
 
 .card {
@@ -605,57 +677,100 @@ select {
   flex-direction: column;
 }
 
+/* Студийная вырезка целиком на серой плитке: cover срезал предмет по краям */
 .card-img {
-  aspect-ratio: 1 / 1;
-  background: #ece6d8;
+  aspect-ratio: 4 / 5;
+  background: var(--paper-2);
   overflow: hidden;
+  padding: 14px;
+  border-bottom: 1px solid var(--line);
 }
 
 .card-img img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  mix-blend-mode: multiply;
 }
 
 .card-body {
-  padding: 16px 16px 18px;
+  padding: 12px 14px 14px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   flex: 1;
 }
 
+.card-spec {
+  font-family: var(--font-mono), "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.card-badges:empty {
+  display: none;
+}
+
+/* Подвал карточки: цена слева, действие справа, над ними линейка */
+.card-foot {
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .card-sku {
   color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.12em;
 }
 
 .card-body h3 {
-  font-size: 1.02rem;
-  letter-spacing: -0.02em;
+  font-family: var(--font-sans), Manrope, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   line-height: 1.25;
 }
 
 .price {
-  font-weight: 700;
-  font-size: 1.12rem;
-  margin-top: auto;
+  font-family: var(--font-mono), "IBM Plex Mono", monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.1;
 }
 
 .price small {
-  font-weight: 500;
+  display: block;
+  font-weight: 400;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
+/* Метки переехали в тело карточки — в макете они стоят под характеристиками */
 .badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  border: 1px solid var(--ink);
   background: var(--ink);
   color: #fff;
-  padding: 5px 9px;
-  border-radius: 999px;
-  font-size: 0.68rem;
+  padding: 0 10px;
+  border-radius: var(--radius);
+  font-size: 10px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-family: var(--font-mono), "IBM Plex Mono", monospace;
@@ -668,7 +783,22 @@ select {
   padding: 6px 12px;
   font-size: 0.72rem;
   letter-spacing: 0.08em;
-  box-shadow: 0 8px 18px rgba(196, 92, 50, 0.45);
+}
+
+/* Там, где метка лежит поверх фото, ей по-прежнему нужна абсолютная привязка */
+.cat .badge,
+.product-gallery .badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+/* Маркировка предмета, а не коммерция: ГОСТ и класс нагрузки — сигнальным жёлтым */
+.badge-gost {
+  background: var(--signal);
+  color: var(--ink);
+  border: 1px solid var(--ink);
 }
 
 .card-sale {
@@ -688,25 +818,26 @@ select {
 }
 
 /* Advantages */
+/* Светлая схема: блок перестал быть чёрным, структуру держат линейки */
 .adv {
-  background: var(--ink);
-  color: #efe8d8;
+  background: var(--paper);
+  color: var(--ink);
 }
 
 .adv .section-head p {
-  color: #c9c1ad;
+  color: var(--ink-2);
 }
 
 .adv-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--line);
+  border: 1px solid var(--line);
 }
 
 .adv-item {
-  background: #1c1e19;
+  background: var(--paper);
   padding: 28px;
 }
 
@@ -721,7 +852,7 @@ select {
 }
 
 .adv-item p {
-  color: #c4bba6;
+  color: #b9b7b1;
   font-size: 0.95rem;
 }
 
@@ -805,7 +936,7 @@ select {
   width: 100%;
   border: 1px solid var(--line);
   background: var(--paper);
-  border-radius: 10px;
+  border-radius: var(--radius);
   padding: 12px 12px;
   color: var(--ink);
   outline: none;
@@ -816,6 +947,8 @@ textarea:focus,
 select:focus {
   border-color: var(--ink);
   background: #fff;
+  outline: 2px solid var(--copper);
+  outline-offset: 2px;
 }
 
 textarea {
@@ -839,8 +972,8 @@ textarea {
 .form-ok {
   display: none;
   padding: 14px;
-  background: #e7efe0;
-  border-radius: 10px;
+  background: #e8e7e3;
+  border-radius: var(--radius);
   color: #2d4a28;
 }
 
@@ -883,7 +1016,7 @@ textarea {
 .chip {
   border: 1px solid var(--line);
   background: transparent;
-  border-radius: 999px;
+  border-radius: var(--radius);
   padding: 8px 12px;
   cursor: pointer;
   color: var(--ink-2);
@@ -924,18 +1057,40 @@ textarea {
   padding-bottom: 60px;
 }
 
+/* align-self: галерея — элемент растягивающейся колонки, без этого высота
+   приходила от блока характеристик и cover срезал фото до белого фона */
 .product-gallery {
   position: relative;
-  background: var(--white);
+  align-self: start;
+  background: var(--paper-2);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   overflow: hidden;
+  padding: 28px;
 }
 
 .product-gallery img {
   width: 100%;
+  height: auto;
   aspect-ratio: 1;
-  object-fit: cover;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+/* Табличка под фото: артикул и габариты набраны как на паспорте изделия */
+.gallery-plate {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 24px -28px -28px;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+  font-family: var(--font-mono), "IBM Plex Mono", monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .product h1 {
@@ -952,13 +1107,18 @@ textarea {
 
 .spec td {
   padding: 10px 0;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--line-soft);
   vertical-align: top;
+  font-variant-numeric: tabular-nums;
 }
 
 .spec td:first-child {
   color: var(--muted);
   width: 42%;
+  font-family: var(--font-mono), "IBM Plex Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .product-actions {
@@ -975,7 +1135,7 @@ textarea {
 
 .color {
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: var(--radius);
   padding: 4px 10px;
   font-size: 0.8rem;
   background: var(--white);
@@ -1050,10 +1210,11 @@ textarea {
 
 /* Footer */
 .footer {
-  background: #141612;
-  color: #d8d0be;
+  background: var(--paper-2);
+  color: var(--ink-2);
   padding: 48px 0 24px;
   margin-top: 40px;
+  border-top: 1px solid var(--line);
 }
 
 .footer-grid {
@@ -1080,8 +1241,8 @@ textarea {
   text-underline-offset: 3px;
   text-decoration-color: rgba(196, 92, 50, 0.45);
   transition:
-    color 0.18s,
-    text-decoration-color 0.18s;
+    90ms color linear,
+    90ms text-decoration-color linear;
 }
 
 .prose a:hover,
@@ -1114,7 +1275,7 @@ textarea {
 }
 
 .footer h4 {
-  color: #f3ecde;
+  color: #f0efeb;
   margin-bottom: 12px;
   font-size: 0.95rem;
 }
@@ -1156,7 +1317,7 @@ textarea {
 .modal-card {
   width: min(480px, 100%);
   background: var(--white);
-  border-radius: 16px;
+  border-radius: var(--radius);
   padding: 24px;
 }
 
@@ -1202,8 +1363,8 @@ textarea {
 .cart-thumb {
   width: 88px;
   height: 88px;
-  background: #ece6d8;
-  border-radius: 10px;
+  background: #eceae5;
+  border-radius: var(--radius);
   overflow: hidden;
 }
 
@@ -1229,7 +1390,7 @@ textarea {
   height: 36px;
   border: 1px solid var(--line);
   background: var(--paper);
-  border-radius: 8px;
+  border-radius: var(--radius);
 }
 
 .cart-qty button {
@@ -1335,7 +1496,7 @@ body:has(.auth-screen) .footer {
   position: absolute;
   inset: auto 40px 40px 40px;
   z-index: 1;
-  color: #f6f1e6;
+  color: #f7f6f3;
   max-width: 42ch;
 }
 
@@ -1355,7 +1516,7 @@ body:has(.auth-screen) .footer {
   list-style: none;
   display: grid;
   gap: 8px;
-  color: #e6ddc8;
+  color: #e3e2de;
   font-size: 0.95rem;
 }
 
@@ -1486,6 +1647,23 @@ body:has(.auth-screen) .footer {
   margin-top: 12px;
 }
 
+@media (max-width: 1200px) {
+  .header-phone {
+    display: none;
+  }
+  .nav {
+    gap: 16px;
+  }
+}
+
+/* Ступени каталога: 4 → 3 → 2 → 1, иначе с 1280px сразу падало в две колонки */
+@media (max-width: 1280px) {
+  .grid-4,
+  .cats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 980px) {
   .nav,
   .header-phone {
@@ -1500,7 +1678,6 @@ body:has(.auth-screen) .footer {
   }
   .cats,
   .grid-3,
-  .grid-4,
   .adv-grid,
   .split,
   .home-lead,
@@ -1556,10 +1733,33 @@ body:has(.auth-screen) .footer {
   }
 }
 
+@media (max-width: 980px) {
+  .grid-4,
+  .cats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 640px) {
+  /* Unbounded заметно шире Manrope: «конфиденциальности» одним словом
+     не влезало в 362px, поэтому на телефоне заголовки страниц мельче */
+  h1 {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+    overflow-wrap: anywhere;
+  }
+  /* Заголовок капслоком и описание рядом не помещаются — ставим в столбец */
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .nomen {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .hero-stats,
   .facts,
-  .grid-4 {
+  .grid-4,
+  .cats {
     grid-template-columns: 1fr;
   }
   .hero-actions {
@@ -1568,6 +1768,9 @@ body:has(.auth-screen) .footer {
   }
   .hero-actions .btn {
     width: 100%;
+  }
+  .hero h1 {
+    font-size: clamp(1.9rem, 8.2vw, 2.6rem);
   }
   .hero p.lead {
     max-width: none;
@@ -1581,9 +1784,15 @@ body:has(.auth-screen) .footer {
   .section {
     padding: 56px 0;
   }
-  .wrap,
+  :root {
+    --edge: 16px;
+  }
+  /* На 390px логотип с подписью и иконки не влезали в 362px — подпись прячем */
   .header-inner {
-    width: min(var(--max), calc(100% - 28px));
+    gap: 12px;
+  }
+  .logo-text span {
+    display: none;
   }
   .hero-inner {
     padding: 48px 16px 92px;
@@ -1618,7 +1827,7 @@ body:has(.auth-screen) .footer {
   padding: 14px;
   background: #f6e3dc;
   border: 1px solid var(--copper);
-  border-radius: 10px;
+  border-radius: var(--radius);
   color: var(--copper-2);
   font-size: 0.9rem;
 }
@@ -1641,7 +1850,7 @@ body:has(.auth-screen) .footer {
   width: 56px;
   height: 56px;
   border: 0;
-  border-radius: 50%;
+  border-radius: var(--radius);
   background: var(--copper);
   color: #fff;
   cursor: pointer;
@@ -1671,7 +1880,7 @@ body:has(.auth-screen) .footer {
   width: min(340px, calc(100vw - 40px));
   background: var(--white);
   border: 1px solid var(--line);
-  border-radius: 16px;
+  border-radius: var(--radius);
   padding: 22px;
   box-shadow: var(--shadow);
 }
@@ -1690,8 +1899,8 @@ body:has(.auth-screen) .footer {
   z-index: 65;
   width: min(520px, calc(100vw - 40px));
   background: var(--ink);
-  color: #e8e1d0;
-  border-radius: 14px;
+  color: #e8e7e3;
+  border-radius: var(--radius);
   padding: 18px 20px;
   display: flex;
   flex-direction: column;
@@ -1723,8 +1932,8 @@ body:has(.auth-screen) .footer {
 }
 
 .cookie-necessary {
-  color: #e8e1d0;
-  border-color: rgba(232, 225, 208, 0.35);
+  color: #e8e7e3;
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 .cookie-necessary:hover {
@@ -1748,7 +1957,7 @@ body:has(.auth-screen) .footer {
   background: rgba(196, 92, 50, 0.1);
   border-bottom: 1px dashed var(--copper);
   padding: 1px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius);
   color: var(--copper-2);
 }
 
@@ -1785,7 +1994,7 @@ body:has(.auth-screen) .footer {
 /* Карточки условий на страницах доставки, оплаты и опта */
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
   padding-bottom: 8px;
 }
@@ -1819,7 +2028,7 @@ body:has(.auth-screen) .footer {
 /* Строка цифр */
 .stat-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
   padding: 28px 0 8px;
   border-top: 1px solid var(--line);
@@ -1844,7 +2053,7 @@ body:has(.auth-screen) .footer {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
@@ -1879,7 +2088,7 @@ body:has(.auth-screen) .footer {
 /* Полоса с призывом к действию */
 .cta-strip {
   background: var(--ink);
-  color: #efe8d8;
+  color: #f2f1ed;
   border-radius: var(--radius);
   padding: 36px 40px;
   display: flex;
@@ -1896,13 +2105,13 @@ body:has(.auth-screen) .footer {
 }
 
 .cta-strip p {
-  color: #c4bba6;
+  color: #b9b7b1;
   margin-top: 8px;
   max-width: 46ch;
 }
 
 .cta-strip .btn-ghost {
-  color: #efe8d8;
+  color: #f2f1ed;
   border-color: rgba(255, 255, 255, 0.4);
 }
 
@@ -1926,9 +2135,9 @@ body:has(.auth-screen) .footer {
   place-items: center;
   width: 40px;
   height: 40px;
-  border-radius: 10px;
+  border-radius: var(--radius);
   border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #d8d0be;
+  color: #d5d4cf;
   transition:
     0.18s background,
     0.18s color;
@@ -2020,7 +2229,7 @@ body:has(.auth-screen) .footer {
   justify-content: space-between;
   gap: 10px;
   padding: 6px 8px;
-  border-radius: 7px;
+  border-radius: var(--radius);
   font-size: 0.89rem;
   color: var(--ink-2);
   line-height: 1.3;
@@ -2144,7 +2353,7 @@ body:has(.auth-screen) .footer {
   gap: 10px;
   padding: 5px 6px;
   margin: 0 -6px;
-  border-radius: 7px;
+  border-radius: var(--radius);
   font-size: 0.89rem;
   color: var(--ink-2);
   cursor: pointer;
@@ -2191,7 +2400,7 @@ body:has(.auth-screen) .footer {
 .fcheck-single {
   margin: 0;
   padding: 14px 16px;
-  border-radius: 0;
+  border-radius: var(--radius);
 }
 
 /* --- Панель над сеткой --- */
@@ -2240,7 +2449,7 @@ body:has(.auth-screen) .footer {
   background: var(--ink);
   color: var(--white);
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--radius);
   padding: 6px 12px;
   font-size: 0.83rem;
   cursor: pointer;
@@ -2324,7 +2533,7 @@ body:has(.auth-screen) .footer {
   padding: 0 10px;
   border: 1px solid var(--line);
   background: var(--white);
-  border-radius: 10px;
+  border-radius: var(--radius);
   color: var(--ink-2);
   cursor: pointer;
   font-variant-numeric: tabular-nums;
@@ -2395,7 +2604,7 @@ body:has(.auth-screen) .footer {
   width: 40px;
   height: 40px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--radius);
   background: var(--white);
   font-size: 1.4rem;
   line-height: 1;
@@ -2483,7 +2692,7 @@ select:focus {
 .stage-line {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 1px;
   background: var(--line);
   border: 1px solid var(--line);
@@ -2511,7 +2720,7 @@ select:focus {
 .nomen {
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -2522,7 +2731,7 @@ select:focus {
   gap: 12px;
   padding: 13px 16px;
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: var(--radius);
   background: var(--white);
   font-size: 0.92rem;
   line-height: 1.3;
@@ -2574,7 +2783,7 @@ select:focus {
   padding: 18px 22px;
   border-left: 2px solid var(--copper);
   background: var(--white);
-  border-radius: 0 var(--radius) var(--radius) 0;
+  border-radius: var(--radius);
   color: var(--ink-2);
   max-width: 78ch;
 }
@@ -2582,7 +2791,7 @@ select:focus {
 /* Типы объектов */
 .clients-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -2678,4 +2887,479 @@ select:focus {
   .nomen {
     grid-template-columns: 1fr;
   }
+}
+
+/* ============================================================
+   Главная-витрина: логотип во всю ширину, вырезка товара поверх
+   типографики и лента миниатюр — по образцу присланных примеров
+   ============================================================ */
+
+.wordmark {
+  position: relative;
+  padding: 28px var(--edge) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.wordmark-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  color: var(--muted);
+}
+
+.wordmark-type {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display), Unbounded, sans-serif;
+  font-weight: 800;
+  /* Крупно, но не во всю ширину: 15vw давали лишние 60% кегля */
+  font-size: clamp(2.2rem, 9.6vw, 11.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  pointer-events: none;
+}
+
+/* Товар лежит на плашке поверх логотипа: mix-blend-mode красил вырезку
+   в чёрный там, где она попадала на литеры, — плашка решает это честно */
+.wordmark-lead {
+  position: absolute;
+  z-index: 2;
+  left: 44%;
+  top: clamp(88px, 12vw, 205px);
+  width: clamp(190px, 22vw, 310px);
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  padding: 16px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: 90ms background-color linear;
+}
+
+.wordmark-lead img {
+  width: 100%;
+  height: clamp(150px, 17vw, 240px);
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.wordmark-lead-cap {
+  border-top: 1px solid var(--line);
+  padding: 10px 0;
+  color: var(--muted);
+  transition: 90ms color linear;
+}
+
+.wordmark-lead:hover {
+  background: var(--paper);
+}
+
+.wordmark-lead:hover .wordmark-lead-cap {
+  color: var(--copper);
+}
+
+.wordmark-foot {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: end;
+  padding: 18px 0 26px;
+}
+
+.claims {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--ink);
+}
+
+.claims-note {
+  justify-self: end;
+  max-width: 36ch;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.claims-note p {
+  font-size: 0.95rem;
+  color: var(--ink-2);
+}
+
+.link-arrow {
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 2px;
+  transition: 90ms color linear, 90ms border-color linear;
+}
+
+.link-arrow::after {
+  content: " →";
+}
+
+.link-arrow:hover {
+  color: var(--copper);
+  border-color: var(--copper);
+}
+
+/* Лента вырезок: серые плитки без рамок, в одну линию */
+.cutouts {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border-top: 1px solid var(--line);
+}
+
+.cutout {
+  position: relative;
+  background: var(--paper-2);
+  padding: 18px 18px 26px;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  transition: 90ms background-color linear;
+}
+
+.cutout img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+
+.cutout span {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  color: var(--muted);
+}
+
+.cutout:hover {
+  background: var(--paper);
+}
+
+/* Полоса с фотографией объекта на всю ширину экрана */
+.photo-band {
+  position: relative;
+  border-top: 1px solid var(--line);
+}
+
+.photo-band img {
+  width: 100%;
+  height: clamp(320px, 46vw, 620px);
+  object-fit: cover;
+}
+
+.photo-band-note {
+  padding: 16px var(--edge) 20px;
+  max-width: 70ch;
+  font-size: 1.05rem;
+  color: var(--ink-2);
+  border-top: 1px solid var(--line);
+}
+
+/* Чёрная лента каталога с нумерацией разделов */
+/* Направления: та же структура, но на бумаге, а не на чернилах */
+.catalog-band {
+  background: var(--paper);
+  color: var(--ink);
+  padding: 56px 0 64px;
+  border-top: 1px solid var(--line);
+}
+
+.band-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.band-head h2 {
+  font-size: clamp(2rem, 5vw, 4.2rem);
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.catalog-band .link-arrow {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.catalog-band .link-arrow:hover {
+  color: var(--copper);
+  border-color: var(--copper);
+}
+
+.band-list {
+  list-style: none;
+}
+
+.band-list a {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line-soft);
+  transition: 90ms color linear;
+}
+
+.band-n {
+  color: var(--copper);
+}
+
+.band-name {
+  font-family: var(--font-display), Unbounded, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.1rem, 2.2vw, 1.8rem);
+  letter-spacing: -0.02em;
+}
+
+.band-count {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.band-list a:hover {
+  color: var(--copper);
+}
+
+.band-list a:hover .band-count {
+  color: var(--copper);
+}
+
+@media (max-width: 980px) {
+  .wordmark-foot {
+    grid-template-columns: 1fr;
+  }
+  .claims-note {
+    justify-self: start;
+  }
+  .cutouts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .wordmark-lead {
+    position: static;
+    width: 100%;
+    max-width: 320px;
+    margin-top: 16px;
+  }
+  .wordmark-lead img {
+    height: 180px;
+  }
+}
+
+@media (max-width: 640px) {
+  .wordmark-top {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cutouts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .band-list a {
+    grid-template-columns: 44px 1fr auto;
+    gap: 12px;
+  }
+}
+
+
+/* Объекты: три фотографии с подписями вместо ещё одной сетки каталога */
+.objects {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.object figure {
+  margin: 0;
+}
+
+.object img {
+  width: 100%;
+  height: clamp(220px, 24vw, 340px);
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.object figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 12px;
+}
+
+.object figcaption b {
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.object figcaption span {
+  font-size: 0.9rem;
+  color: var(--ink-2);
+}
+
+@media (max-width: 900px) {
+  .objects {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   Витрина главной: фото первого экрана, ряд цифр на линейках,
+   имя во всю ширину с абзацем и сетка объектов
+   ============================================================ */
+
+/* Ряд цифр: ячейки разделены вертикальными линейками */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-bottom: 1px solid var(--line);
+}
+
+.stat-cell {
+  padding: 28px var(--edge) 32px;
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-cell:last-child {
+  border-right: 0;
+}
+
+.stat-cell b {
+  font-family: var(--font-display), Unbounded, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.6rem);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-cell span {
+  font-size: 0.9rem;
+  color: var(--ink-2);
+  max-width: 24ch;
+}
+
+/* Имя во всю ширину и абзац рядом — приём из roomór */
+.statement {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 40px;
+  align-items: start;
+  padding: 8px 0 30px;
+}
+
+.statement p {
+  font-size: clamp(1.05rem, 1.7vw, 1.45rem);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  max-width: 46ch;
+}
+
+.statement .link-arrow {
+  justify-self: end;
+  align-self: end;
+}
+
+/* Объекты: фотография, подпись и кнопка «смотреть» в подвале карточки */
+.works {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.work {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.work img {
+  width: 100%;
+  height: clamp(240px, 26vw, 380px);
+  object-fit: cover;
+  border-bottom: 1px solid var(--line);
+}
+
+.work-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+}
+
+.work-foot b {
+  display: block;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.work-foot span {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.work-btn {
+  flex-shrink: 0;
+  border: 1px solid var(--ink);
+  padding: 8px 14px;
+  color: var(--ink);
+  transition: 90ms background-color linear, 90ms color linear;
+}
+
+.work:hover .work-btn {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+@media (max-width: 900px) {
+  .stats-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .stat-cell:nth-child(2n) {
+    border-right: 0;
+  }
+  .stat-cell:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+  .statement {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .statement .link-arrow {
+    justify-self: start;
+  }
+  .works {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Примечания производителя под таблицей: то, что не разложилось в пары */
+.spec-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: -6px 0 22px;
+  padding-left: 14px;
+  border-left: 2px solid var(--copper);
+  color: var(--ink-2);
+  font-size: 0.92rem;
 }

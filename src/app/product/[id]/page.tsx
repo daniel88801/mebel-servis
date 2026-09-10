@@ -14,6 +14,7 @@ import {
   products,
   productsByCategory,
   toCardData,
+  type Product,
 } from "@/data/catalog";
 import { absolute } from "@/lib/site";
 
@@ -33,6 +34,121 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: { images: [product.image] },
     alternates: { canonical: productHref(product.id) },
   };
+}
+
+/** Описание от производителя — те же пары «свойство: значение», только строками.
+ *  Разбираем их в таблицу, а всё, что не разложилось в пару, уходит в примечание. */
+function parseDesc(desc?: string) {
+  const rows: { label: string; value: string }[] = [];
+  const notes: string[] = [];
+  for (const raw of (desc ?? "").split("\n")) {
+    const line = raw.trim();
+    if (!line) continue;
+    if (line.startsWith("*")) {
+      notes.push(line.replace(/^\*\s*/, ""));
+      continue;
+    }
+    const pair = line.match(/^([^:]{2,48}):\s*(.+)$/);
+    if (pair) rows.push({ label: pair[1].trim(), value: pair[2].trim().replace(/\.$/, "") });
+    else notes.push(line);
+  }
+  return { rows, notes };
+}
+
+/** Два ключа на строку. Строгий различает «Вес (нетто)» и «Вес (брутто)» —
+ *  обе строки нужны. Мягкий отбрасывает скобки, чтобы «Габаритные размеры (ДхШхВ)»
+ *  из описания перекрывали разобранное поле «Габариты». */
+const normStrict = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/[^а-яa-z]/g, "");
+
+const norm = (s: string) => normStrict(s.replace(/\([^)]*\)/g, ""));
+
+const ALIASES: Record<string, string[]> = {
+  габариты: ["габаритныеразмеры", "размеры"],
+  материалы: ["материал"],
+  нагрузка: ["нагрузканаспальноеместо"],
+  вес: ["веснетто", "весбрутто"],
+  объемупаковки: ["объем", "объемупаковки"],
+  декоры: ["цвет"],
+  соответствие: ["гост"],
+};
+
+/** Одна таблица на всю карточку: сначала артикул и раздел, затем описание
+ *  производителя, затем разобранные поля, которых в описании не было. */
+function SpecTable({
+  product,
+  category,
+}: {
+  product: Product;
+  category?: { id: string; name: string };
+}) {
+  const { rows: descRows, notes } = parseDesc(product.desc);
+  const strictUsed = new Set<string>();
+  const looseUsed = new Set<string>();
+  const out: { label: string; value: React.ReactNode }[] = [];
+
+  /** Описание сверяется по строгому ключу, разобранные поля — ещё и по мягкому
+   *  вместе с псевдонимами: так они не дублируют то, что уже сказал производитель. */
+  const push = (label: string, value: React.ReactNode, fromDesc = false) => {
+    const strict = normStrict(label);
+    const loose = norm(label);
+    if (strictUsed.has(strict)) return;
+    if (!fromDesc && [loose, ...(ALIASES[loose] ?? [])].some((k) => looseUsed.has(k))) return;
+    strictUsed.add(strict);
+    looseUsed.add(loose);
+    out.push({ label, value });
+  };
+
+  push("Артикул", product.sku || "—");
+  if (category) push("Раздел", <Link href={`/catalog/${category.id}`}>{category.name}</Link>);
+  for (const row of descRows) push(row.label, row.value, true);
+  if (product.sizes) push("Габариты", `${product.sizes} мм`);
+  if (product.material) push("Материалы", product.material);
+  if (product.coating) push("Покрытие", product.coating);
+  if (product.sleeping) push("Спальное место", product.sleeping);
+  if (product.load != null) push("Нагрузка", `до ${product.load} кг`);
+  if (product.weight != null) push("Вес", `${product.weight} кг`);
+  if (product.volume != null) push("Объём упаковки", `${product.volume} м³`);
+  if (product.gost) push("Соответствие", product.gost);
+  if (product.warranty) push("Гарантия", product.warranty);
+  if (product.country) push("Производство", product.country);
+  if (product.colors?.length) {
+    push(
+      "Декоры",
+      <span className="colors">
+        {product.colors.map((c: string) => (
+          <span className="color" key={c}>
+            {c}
+          </span>
+        ))}
+      </span>,
+    );
+  }
+
+  return (
+    <>
+      <table className="spec">
+        <tbody>
+          {out.map((row) => (
+            <tr key={row.label}>
+              <td>{row.label}</td>
+              <td>{row.value}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {notes.length > 0 && (
+        <div className="spec-notes">
+          {notes.map((n) => (
+            <p key={n}>{n}</p>
+          ))}
+        </div>
+      )}
+    </>
+  );
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -127,6 +243,10 @@ export default async function ProductPage({ params }: Props) {
           {product.category === "sale" && (
             <span className="badge badge-sale">Распродажа</span>
           )}
+          <div className="gallery-plate">
+            <span>{product.sku}</span>
+            {product.sizes && <span>{product.sizes} мм</span>}
+          </div>
         </div>
         <div>
           <p className="mono" style={{ color: "var(--copper)" }}>
@@ -138,7 +258,6 @@ export default async function ProductPage({ params }: Props) {
                 : ""}
           </p>
           <h1>{product.name}</h1>
-          {product.desc && <p style={{ whiteSpace: "pre-line" }}>{product.desc}</p>}
           <div className="price" style={{ fontSize: "1.6rem", marginTop: 16 }}>
             {product.price == null ? (
               "Цена по запросу"
@@ -149,96 +268,7 @@ export default async function ProductPage({ params }: Props) {
               </>
             )}
           </div>
-          <table className="spec">
-            <tbody>
-              <tr>
-                <td>Артикул</td>
-                <td>{product.sku || "—"}</td>
-              </tr>
-              {category && (
-                <tr>
-                  <td>Категория</td>
-                  <td>
-                    <Link href={`/catalog/${category.id}`}>{category.name}</Link>
-                  </td>
-                </tr>
-              )}
-              {product.sizes && (
-                <tr>
-                  <td>Габариты</td>
-                  <td>{product.sizes}</td>
-                </tr>
-              )}
-              {product.material && (
-                <tr>
-                  <td>Материалы</td>
-                  <td>{product.material}</td>
-                </tr>
-              )}
-              {product.coating && (
-                <tr>
-                  <td>Покрытие</td>
-                  <td>{product.coating}</td>
-                </tr>
-              )}
-              {product.sleeping && (
-                <tr>
-                  <td>Спальное место</td>
-                  <td>{product.sleeping}</td>
-                </tr>
-              )}
-              {product.load != null && (
-                <tr>
-                  <td>Нагрузка</td>
-                  <td>до {product.load} кг</td>
-                </tr>
-              )}
-              {product.weight != null && (
-                <tr>
-                  <td>Вес</td>
-                  <td>{product.weight} кг</td>
-                </tr>
-              )}
-              {product.volume != null && (
-                <tr>
-                  <td>Объём упаковки</td>
-                  <td>{product.volume} м³</td>
-                </tr>
-              )}
-              {product.gost && (
-                <tr>
-                  <td>Соответствие</td>
-                  <td>{product.gost}</td>
-                </tr>
-              )}
-              {product.warranty && (
-                <tr>
-                  <td>Гарантия</td>
-                  <td>{product.warranty}</td>
-                </tr>
-              )}
-              {product.country && (
-                <tr>
-                  <td>Производство</td>
-                  <td>{product.country}</td>
-                </tr>
-              )}
-              {!!product.colors?.length && (
-                <tr>
-                  <td>Декоры</td>
-                  <td>
-                    <span className="colors">
-                      {product.colors.map((c) => (
-                        <span className="color" key={c}>
-                          {c}
-                        </span>
-                      ))}
-                    </span>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+          <SpecTable product={product} category={category} />
           <div className="product-actions">
             <AddToCartButton
               className="btn btn-copper"

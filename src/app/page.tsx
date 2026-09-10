@@ -5,7 +5,14 @@ import { LeadForm } from "@/components/LeadForm";
 import { PdConsentText } from "@/components/LegalConsent";
 import { RequestButton } from "@/components/RequestModal";
 import { HeroSlideshow } from "@/components/HeroSlideshow";
-import { advantages, categories, productsByCategory, toCardData } from "@/data/catalog";
+import {
+  advantages,
+  categories,
+  categoryCounts,
+  products,
+  productsByCategory,
+  toCardData,
+} from "@/data/catalog";
 
 /** По одной первой позиции из каждого раздела, максимум восемь. */
 const hits = categories
@@ -13,6 +20,50 @@ const hits = categories
   .filter(Boolean)
   .slice(0, 8)
   .map(toCardData);
+
+/** Витрина первого экрана: одна крупная вырезка и лента мелких под ней. */
+const showcase = ["beds", "lockers", "office", "students", "banquet", "safes"]
+  .map((id) => productsByCategory(id)[0])
+  .filter(Boolean);
+const [lead, ...strip] = showcase;
+
+/** Три типа объектов — фотографии из тех же съёмок, что и первый экран. */
+const objects = [
+  {
+    src: "/images/hero/barracks.jpg",
+    alt: "Казарма: двухъярусные кровати и шкафы",
+    title: "Казармы и ведомственные объекты",
+    note: "Кровати по ГОСТ, шкафы, тумбы, табуреты",
+    href: "/catalog/army",
+  },
+  {
+    src: "/images/hero/hostel.jpg",
+    alt: "Комната общежития с двухъярусной кроватью",
+    title: "Общежития и хостелы",
+    note: "Комплектация комнаты под число мест",
+    href: "/catalog/dorms",
+  },
+  {
+    src: "/images/hero/classroom.jpg",
+    alt: "Учебная аудитория со столами на металлокаркасе",
+    title: "Учебные и социальные учреждения",
+    note: "Столы и стулья на металлокаркасе",
+    href: "/catalog/students",
+  },
+  {
+    src: "/images/hero/hotel.jpg",
+    alt: "Гостиничный номер с кроватью и шкафом",
+    title: "Гостиницы",
+    note: "Кровати, шкафы и столы из ЛДСП",
+    href: "/catalog/hotels",
+  },
+] as const;
+
+/** Разделы для списка направлений: самые объёмные по числу позиций. */
+const bigCategories = [...categories]
+  .filter((c) => c.id !== "sale")
+  .sort((a, b) => (categoryCounts[b.id] ?? 0) - (categoryCounts[a.id] ?? 0))
+  .slice(0, 6);
 
 export default function HomePage() {
   return (
@@ -22,30 +73,62 @@ export default function HomePage() {
         <div className="hero-inner">
           <p className="kicker mono">Нижний Новгород · собственное производство</p>
           <h1>Мебель, которая выдерживает объект</h1>
-          <p className="lead">
-            Наша задача — создавать надежную мебель там, где важны не громкие обещания, а качество,
-            стабильность и способность производителя выполнить поставленную задачу.
-          </p>
           <div className="hero-actions">
             <Link className="btn btn-copper" href="/catalog">
               Открыть каталог
             </Link>
             <RequestButton className="btn btn-ghost-light">Заявка на поставку</RequestButton>
           </div>
-          <div className="hero-stats">
-            <div>
-              <b>4 000+</b>
-              <span>м² производственный комплекс</span>
-            </div>
-            <div>
-              <b>19</b>
-              <span>разделов каталога</span>
-            </div>
-            <div>
-              <b>опт</b>
-              <span>серийные и комплексные заказы</span>
-            </div>
-          </div>
+        </div>
+      </section>
+
+      <section className="stats-row">
+        <div className="stat-cell">
+          <b>4 000+</b>
+          <span>м² производственный комплекс</span>
+        </div>
+        <div className="stat-cell">
+          <b>{products.length}</b>
+          <span>позиций в каталоге</span>
+        </div>
+        <div className="stat-cell">
+          <b>{categories.length}</b>
+          <span>направлений по типам объектов</span>
+        </div>
+        <div className="stat-cell">
+          <b>ГОСТ</b>
+          <span>кровати по 2056-77</span>
+        </div>
+      </section>
+
+      <section className="wordmark">
+        <h2 className="wordmark-type">
+          <span>Мебель</span>
+          <span>Сервис</span>
+        </h2>
+        <div className="statement">
+          <p>
+            Производим мебель для объектов с интенсивной эксплуатацией: казармы, общежития,
+            гостиницы, учебные и производственные помещения. Металл и ЛДСП, серийные партии,
+            изготовление по техническому заданию.
+          </p>
+          <Link className="link-arrow mono" href="/about">
+            О производстве
+          </Link>
+        </div>
+        <div className="cutouts">
+          {strip.map((p) => (
+            <Link className="cutout" key={p.id} href={`/catalog/${p.category}`}>
+              <Image
+                src={p.image}
+                alt={p.name}
+                width={400}
+                height={400}
+                sizes="(max-width: 640px) 45vw, 20vw"
+              />
+              <span className="mono">{p.sku}</span>
+            </Link>
+          ))}
         </div>
       </section>
 
@@ -55,32 +138,47 @@ export default function HomePage() {
             <div className="section-head">
               <div>
                 <p className="mono" style={{ color: "var(--copper)", marginBottom: 8 }}>
-                  Каталог
+                  Позиции
                 </p>
-                <h2>Полный каталог по объектам</h2>
+                <h2>Что заказывают чаще всего</h2>
+              </div>
+              <Link className="btn btn-ghost" href="/catalog">
+                Весь каталог
+              </Link>
+            </div>
+            <div className="grid-4">
+              {hits.slice(0, 4).map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="wrap">
+            <div className="section-head">
+              <div>
+                <p className="mono" style={{ color: "var(--copper)", marginBottom: 8 }}>
+                  Объекты
+                </p>
+                <h2>Где стоит наша мебель</h2>
               </div>
               <p>
-                От единичного изделия до оснащения крупного объекта — производим, контролируем и
-                отвечаем за результат.
+                Одни и те же изделия работают в казарме, общежитии и учебном классе — меняются
+                комплектация и объём партии. Мебель не щадят: сменяемый состав, ежедневная
+                нагрузка, перестановки и переезды.
               </p>
             </div>
-            <div className="cats">
-              {categories.map((cat) => (
-                <Link
-                  className={`cat${cat.id === "sale" ? " cat-sale" : ""}`}
-                  key={cat.id}
-                  href={`/catalog/${cat.id}`}
-                >
-                  <Image
-                    src={cat.image}
-                    alt={cat.name}
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 25vw"
-                  />
-                  {cat.id === "sale" && <span className="badge badge-sale">Распродажа</span>}
-                  <div className="cat-body">
-                    <span className="mono">{cat.short}</span>
-                    <h3>{cat.name}</h3>
+            <div className="works">
+              {objects.map((o) => (
+                <Link className="work" key={o.src} href={o.href}>
+                  <Image src={o.src} alt={o.alt} width={1200} height={800} sizes="(max-width: 900px) 100vw, 50vw" />
+                  <div className="work-foot">
+                    <div>
+                      <b>{o.title}</b>
+                      <span>{o.note}</span>
+                    </div>
+                    <span className="work-btn mono">Смотреть</span>
                   </div>
                 </Link>
               ))}
@@ -88,7 +186,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
+        <section className="section">
           <div className="wrap split">
             <Image
               src="/images/production.jpg"
@@ -142,7 +240,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="section adv">
+        <section className="section">
           <div className="wrap">
             <div className="section-head">
               <div>
@@ -168,28 +266,29 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="section">
+        <section className="catalog-band">
           <div className="wrap">
-            <div className="section-head">
-              <div>
-                <p className="mono" style={{ color: "var(--copper)", marginBottom: 8 }}>
-                  Позиции
-                </p>
-                <h2>Что заказывают чаще всего</h2>
-              </div>
-              <Link className="btn btn-ghost" href="/catalog">
-                Весь каталог
+            <div className="band-head">
+              <h2>Направления</h2>
+              <Link className="link-arrow mono" href="/catalog">
+                Все {categories.length} разделов
               </Link>
             </div>
-            <div className="grid-4">
-              {hits.map((p) => (
-                <ProductCard key={p.id} product={p} />
+            <ol className="band-list">
+              {bigCategories.map((cat, i) => (
+                <li key={cat.id}>
+                  <Link href={`/catalog/${cat.id}`}>
+                    <span className="band-n mono">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="band-name">{cat.name}</span>
+                    <span className="band-count mono">{categoryCounts[cat.id]}</span>
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ol>
           </div>
         </section>
 
-        <section className="section" style={{ paddingTop: 0 }}>
+        <section className="section">
           <div className="wrap home-lead">
             <div>
               <p className="mono" style={{ color: "var(--copper)" }}>
@@ -210,6 +309,9 @@ export default function HomePage() {
                 <br />
                 Почта: <a href="mailto:m1-mebelservis-nn@mail.ru">m1-mebelservis-nn@mail.ru</a>
               </p>
+              <div className="hero-actions">
+                <RequestButton className="btn btn-primary">Заявка на поставку</RequestButton>
+              </div>
             </div>
             <LeadForm
               variant="home"
