@@ -50,6 +50,7 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data
       - caddy-config:/config
+      - caddy-logs:/var/log/caddy
     depends_on:
       web:
         condition: service_healthy
@@ -58,3 +59,4 @@ volumes:
   mebel-data:
   caddy-data:
   caddy-config:
+  caddy-logs:
