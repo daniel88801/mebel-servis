@@ -4,7 +4,7 @@ async function dismissChrome(page: Page) {
   await page.addInitScript(() => {
     localStorage.setItem(
       "ms-cookie-consent",
-      JSON.stringify({ v: "2026-09-03", choice: "all", at: new Date().toISOString() }),
+      JSON.stringify({ v: "2026-09-21", choice: "all", at: new Date().toISOString() }),
     );
   });
 }
@@ -51,7 +51,7 @@ async function loginAsNewUser(
 }
 
 async function addSaleItem(page: Page) {
-  await page.goto("/catalog/sale", { waitUntil: "domcontentloaded" });
+  await page.goto("/catalog/beds", { waitUntil: "domcontentloaded" });
   await page.getByRole("button", { name: "В корзину" }).first().click();
   await expect(page.locator(".header-icon-count")).toBeVisible();
 }

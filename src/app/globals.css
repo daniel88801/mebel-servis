@@ -150,6 +150,7 @@ select {
   position: relative;
   color: var(--ink-2);
   padding: 8px 0;
+  white-space: nowrap;
   transition: color 0.18s;
 }
 
@@ -1675,12 +1676,12 @@ body:has(.auth-screen) .footer {
   margin-top: 12px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1360px) {
   .header-phone {
     display: none;
   }
   .nav {
-    gap: 16px;
+    gap: 14px;
   }
 }
 
@@ -1707,6 +1708,7 @@ body:has(.auth-screen) .footer {
   .cats,
   .grid-3,
   .adv-grid,
+  .directions-grid,
   .split,
   .home-lead,
   .product,
@@ -1728,6 +1730,10 @@ body:has(.auth-screen) .footer {
   }
   .cats {
     grid-template-columns: 1fr 1fr;
+  }
+  .direction {
+    min-height: 0;
+    padding: 28px 20px;
   }
   .cat {
     min-height: 170px;
@@ -2029,6 +2035,78 @@ body:has(.auth-screen) .footer {
   gap: 6px;
   color: var(--ink-2);
   font-size: 0.93rem;
+}
+
+/* Два равных направления на главной: мебель и порошковая окраска */
+.directions {
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.directions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: 0;
+  background: var(--line);
+}
+
+.direction {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 320px;
+  padding: 40px;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.direction h2 {
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  max-width: 12ch;
+}
+
+.direction p:not(.mono) {
+  max-width: 36ch;
+  color: var(--ink-2);
+}
+
+.direction .link-arrow {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.direction .mono {
+  color: var(--copper);
+}
+
+.direction-coat {
+  background: var(--ink);
+  color: #f4f3ef;
+}
+
+.direction-coat p:not(.mono) {
+  color: #cfcec9;
+}
+
+.direction-coat .link-arrow {
+  color: #f4f3ef;
+  border-bottom-color: #f4f3ef;
+}
+
+.direction-coat:hover {
+  background: #1c1c1c;
+}
+
+@media (max-width: 980px) {
+  .directions-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Карточки условий на страницах доставки, оплаты и опта */

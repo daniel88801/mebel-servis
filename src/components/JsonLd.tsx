@@ -24,9 +24,9 @@ export const organizationSchema = {
   logo: absolute("/logo.svg"),
   image: absolute("/images/og.png"),
   description:
-    "Производство металлической и ЛДСП-мебели для казарм, общежитий, школ и гостиниц. Собственный цех в Нижнем Новгороде.",
+    "Производство металлической и ЛДСП-мебели и порошковая окраска металла. Собственный цех в Нижнем Новгороде.",
   telephone: company.phones,
-  email: company.email,
+  email: company.emails,
   taxID: company.inn,
   vatID: company.inn,
   address: {
@@ -34,8 +34,8 @@ export const organizationSchema = {
     addressCountry: "RU",
     addressRegion: "Нижегородская область",
     addressLocality: company.city,
-    streetAddress: "ул. Гордеевская, 139Б",
-    postalCode: "603116",
+    streetAddress: "ул. Народная, 1а",
+    postalCode: "603074",
   },
   openingHours: "Mo-Fr 09:00-17:00",
   openingHoursSpecification: {

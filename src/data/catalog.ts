@@ -6,15 +6,25 @@ export type Company = {
   city: string;
   address: string;
   phones: string[];
+  /** Основной ящик для писем и реквизитов. */
   email: string;
+  /** Все ящики, на которые уходят заявки. */
+  emails: string[];
   hours: string;
   inn: string;
   kpp: string;
   ogrn: string;
+  /** Пустые р/с, к/с и БИК — заказчик их ещё не прислал, на сайте не показываем. */
   rs: string;
   bank: string;
   ks: string;
   bik: string;
+  okpo: string;
+  oktmo: string;
+  okogu: string;
+  okfs: string;
+  okopf: string;
+  okved: string;
 };
 
 export type Category = {

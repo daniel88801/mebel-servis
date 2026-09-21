@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LogoMark } from "./Logo";
 import { categories, company } from "@/data/catalog";
 import { MESSENGERS } from "@/data/contacts";
+import { telHref } from "@/lib/format";
 
 export function Footer() {
   return (
@@ -16,8 +17,9 @@ export function Footer() {
             </span>
           </Link>
           <p style={{ marginTop: 16, maxWidth: "36ch" }}>
-            Производим металлическую и корпусную мебель для объектов с интенсивной эксплуатацией. От
-            единичного изделия до оснащения крупного объекта.
+            Производим металлическую и корпусную мебель для объектов с интенсивной эксплуатацией и
+            окрашиваем металл порошковой краской. От единичного изделия до оснащения крупного
+            объекта.
           </p>
         </div>
         <div>
@@ -33,6 +35,9 @@ export function Footer() {
         <div>
           <h4>Компания</h4>
           <ul>
+            <li>
+              <Link href="/coating">Порошковая окраска</Link>
+            </li>
             <li>
               <Link href="/about">О компании</Link>
             </li>
@@ -73,15 +78,16 @@ export function Footer() {
         <div>
           <h4>Связаться</h4>
           <ul>
-            <li>
-              <a href="tel:+79200050110">{company.phones[0]}</a>
-            </li>
-            <li>
-              <a href="tel:+79308117395">{company.phones[1]}</a>
-            </li>
-            <li>
-              <a href={`mailto:${company.email}`}>{company.email}</a>
-            </li>
+            {company.phones.map((phone) => (
+              <li key={phone}>
+                <a href={telHref(phone)}>{phone}</a>
+              </li>
+            ))}
+            {company.emails.map((email) => (
+              <li key={email}>
+                <a href={`mailto:${email}`}>{email}</a>
+              </li>
+            ))}
             <li>{company.address}</li>
             <li>{company.hours}</li>
           </ul>

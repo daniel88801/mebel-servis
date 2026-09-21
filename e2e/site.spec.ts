@@ -4,7 +4,7 @@ async function dismissChrome(page: Page) {
   await page.addInitScript(() => {
     localStorage.setItem(
       "ms-cookie-consent",
-      JSON.stringify({ v: "2026-09-03", choice: "all", at: new Date().toISOString() }),
+      JSON.stringify({ v: "2026-09-21", choice: "all", at: new Date().toISOString() }),
     );
   });
 }
@@ -12,7 +12,7 @@ async function dismissChrome(page: Page) {
 const PUBLIC_PAGES: { path: string; heading: string | RegExp }[] = [
   { path: "/", heading: /Мебель, которая выдерживает объект/ },
   { path: "/catalog", heading: "Каталог" },
-  { path: "/catalog/sale", heading: "Распродажа" },
+  { path: "/coating", heading: "Порошковая окраска" },
   { path: "/about", heading: "О компании" },
   { path: "/contacts", heading: /Контакт/ },
   { path: "/delivery", heading: /Доставк/ },
@@ -51,26 +51,31 @@ test.describe("Главная и каталог", () => {
     await dismissChrome(page);
   });
 
-  test("на главной есть категории, распродажа выделена, слайдер листается", async ({ page }) => {
+  test("на главной мебель и окраска равнозначны, слайдер листается", async ({ page }) => {
     await page.goto("/", { waitUntil: "domcontentloaded" });
-    await expect(page.locator(".cat-sale")).toBeVisible();
-    await expect(page.locator(".cat-sale .badge-sale")).toContainText("Распродажа");
+    const directions = page.locator(".direction");
+    await expect(directions).toHaveCount(2);
+    await expect(directions.nth(0)).toContainText("Мебель");
+    await expect(directions.nth(1)).toContainText("Порошковая окраска");
+    await directions.nth(1).click();
+    await expect(page).toHaveURL(/\/coating/);
+    await expect(page.locator("h1")).toContainText("Порошковая окраска");
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await expect(page.locator(".hero-slide-label")).toBeVisible();
     const first = await page.locator(".hero-slide-label").textContent();
     await page.getByRole("button", { name: "Следующий интерьер" }).click();
     await expect(page.locator(".hero-slide-label")).not.toHaveText(first ?? "");
   });
 
-  test("в каталоге цена начинается с «от», стикер распродажи на плитке", async ({ page }) => {
-    await page.goto("/catalog/sale", { waitUntil: "domcontentloaded" });
+  test("в каталоге цена начинается с «от»", async ({ page }) => {
+    await page.goto("/catalog/beds", { waitUntil: "domcontentloaded" });
     const price = page.locator(".card .price").first();
-    await expect(price).toHaveText(/^от\s/);
-    await expect(page.locator(".card .badge-sale").first()).toContainText("Распродажа");
-    await expect(page.getByRole("heading", { level: 1 }).first()).toContainText("Распродажа");
+    await expect(price).toHaveText(/^от/);
+    await expect(page.getByRole("heading", { level: 1 }).first()).toContainText("кроват");
   });
 
   test("карточка товара открывается из каталога", async ({ page }) => {
-    await page.goto("/catalog/sale", { waitUntil: "domcontentloaded" });
+    await page.goto("/catalog/beds", { waitUntil: "domcontentloaded" });
     const name = (await page.locator(".card h3").first().textContent())?.trim() ?? "";
     await page.locator(".card h3 a").first().click();
     await expect(page).toHaveURL(/\/product\//);
@@ -83,9 +88,10 @@ test.describe("Главная и каталог", () => {
     await expect(page.locator(".card h3").first()).toContainText(/кроват/i);
   });
 
-  test("на «О компании» распродажа выделена, фото производства современное", async ({ page }) => {
+  test("на «О компании» есть окраска и фото производства", async ({ page }) => {
     await page.goto("/about", { waitUntil: "domcontentloaded" });
-    await expect(page.locator(".nomen-sale")).toContainText("Распродажа");
+    await expect(page.locator("main")).toContainText("Порошковую окраску");
+    await expect(page.locator("main")).not.toContainText("Распродажа");
     await expect(page.locator(".split img").first()).toHaveAttribute("src", /production-beds/);
   });
 
@@ -150,7 +156,7 @@ test.describe("Cookie и документы", () => {
     await page.addInitScript(() => {
       localStorage.setItem(
         "ms-cookie-consent",
-        JSON.stringify({ v: "2026-09-03", choice: "necessary", at: new Date().toISOString() }),
+        JSON.stringify({ v: "2026-09-21", choice: "necessary", at: new Date().toISOString() }),
       );
     });
     await page.goto("/oferta", { waitUntil: "domcontentloaded" });

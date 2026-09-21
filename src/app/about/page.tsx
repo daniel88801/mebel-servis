@@ -4,6 +4,7 @@ import { LeadForm } from "@/components/LeadForm";
 import { PdConsentText } from "@/components/LegalConsent";
 import { ClientIcons } from "@/components/ClientIcons";
 import { categories, categoryCounts, company, products } from "@/data/catalog";
+import { telHref } from "@/lib/format";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
@@ -184,7 +185,8 @@ export default function AboutPage() {
             <p>
               Полный цикл и собственный участок металлообработки позволяют выпускать изделия,
               соответствующие требованиям заказчика: от заготовки и сварки каркаса до порошковой
-              окраски, сборки и упаковки.
+              окраски, сборки и упаковки. Порошковую окраску можно заказать и отдельно — это вторая
+              услуга цеха, наравне с мебелью. <Link href="/coating">Условия окраски</Link>.
             </p>
           </div>
 
@@ -303,11 +305,17 @@ export default function AboutPage() {
             </p>
             <p style={{ marginTop: 12, color: "var(--ink-2)" }}>
               Телефон:{" "}
-              <a href="tel:+79200050110">
+              <a href={telHref(company.phones[0])}>
                 <strong>{company.phones[0]}</strong>
               </a>
               <br />
-              Почта: <a href={`mailto:${company.email}`}>{company.email}</a>
+              Почта:{" "}
+              {company.emails.map((email, i) => (
+                <span key={email}>
+                  {i > 0 && ", "}
+                  <a href={`mailto:${email}`}>{email}</a>
+                </span>
+              ))}
               <br />
               {company.hours}
             </p>

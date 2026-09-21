@@ -9,16 +9,18 @@ import {
   advantages,
   categories,
   categoryCounts,
+  company,
   products,
   productsByCategory,
   toCardData,
 } from "@/data/catalog";
+import { telHref } from "@/lib/format";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
   title: "Мебель-Сервис — производство мебели для объектов, Нижний Новгород",
   description:
-    "Завод в Нижнем Новгороде: кровати по ГОСТ, металлические шкафы, мебель на каркасе и ЛДСП для казарм, общежитий, школ и гостиниц. Цех 4 000+ м².",
+    "Завод в Нижнем Новгороде: мебель для казарм, общежитий, школ и гостиниц и услуга порошковой окраски металла. Цех 4 000+ м².",
   path: "/",
   absoluteTitle: true,
 });
@@ -31,7 +33,7 @@ const hits = categories
   .map(toCardData);
 
 /** Витрина первого экрана: одна крупная вырезка и лента мелких под ней. */
-const showcase = ["beds", "lockers", "office", "students", "banquet", "safes"]
+const showcase = ["beds", "lockers", "office", "students", "army", "safes"]
   .map((id) => productsByCategory(id)[0])
   .filter(Boolean);
 const [lead, ...strip] = showcase;
@@ -84,10 +86,30 @@ export default function HomePage() {
           <h1>Мебель, которая выдерживает объект</h1>
           <div className="hero-actions">
             <Link className="btn btn-copper" href="/catalog">
-              Открыть каталог
+              Каталог мебели
+            </Link>
+            <Link className="btn btn-ghost-light" href="/coating">
+              Порошковая окраска
             </Link>
             <RequestButton className="btn btn-ghost-light">Заявка на поставку</RequestButton>
           </div>
+        </div>
+      </section>
+
+      <section className="directions" aria-label="Направления">
+        <div className="directions-grid">
+          <Link className="direction" href="/catalog">
+            <p className="mono">01 · Мебель</p>
+            <h2>Мебель для объектов</h2>
+            <p>Кровати, шкафы, столы и комплектация казарм, общежитий, школ и гостиниц.</p>
+            <span className="link-arrow mono">Открыть каталог</span>
+          </Link>
+          <Link className="direction direction-coat" href="/coating">
+            <p className="mono">02 · Услуга</p>
+            <h2>Порошковая окраска</h2>
+            <p>Окрашивание металлических изделий порошковой краской. Можно заказать отдельно от мебели.</p>
+            <span className="link-arrow mono">Условия услуги</span>
+          </Link>
         </div>
       </section>
 
@@ -117,9 +139,9 @@ export default function HomePage() {
         </h2>
         <div className="statement">
           <p>
-            Производим мебель для объектов с интенсивной эксплуатацией: казармы, общежития,
-            гостиницы, учебные и производственные помещения. Металл и ЛДСП, серийные партии,
-            изготовление по техническому заданию.
+            Два направления одного цеха: мебель для объектов с интенсивной эксплуатацией и
+            порошковая окраска металла. Казармы, общежития, гостиницы, учебные и производственные
+            помещения. Серийные партии и изготовление по техническому заданию.
           </p>
           <Link className="link-arrow mono" href="/about">
             О производстве
@@ -312,11 +334,11 @@ export default function HomePage() {
               </p>
               <p style={{ marginTop: 12, color: "var(--ink-2)" }}>
                 Телефон:{" "}
-                <a href="tel:+79200050110">
-                  <strong>+7 (920) 005-01-10</strong>
+                <a href={telHref(company.phones[0])}>
+                  <strong>{company.phones[0]}</strong>
                 </a>
                 <br />
-                Почта: <a href="mailto:m1-mebelservis-nn@mail.ru">m1-mebelservis-nn@mail.ru</a>
+                Почта: <a href={`mailto:${company.email}`}>{company.email}</a>
               </p>
               <div className="hero-actions">
                 <RequestButton className="btn btn-primary">Заявка на поставку</RequestButton>

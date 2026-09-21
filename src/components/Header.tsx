@@ -7,9 +7,11 @@ import { LogoMark } from "./Logo";
 import { RequestButton } from "./RequestModal";
 import { HeaderIcons } from "./HeaderIcons";
 import { company } from "@/data/catalog";
+import { telHref } from "@/lib/format";
 
 const NAV = [
   { href: "/catalog", label: "Каталог" },
+  { href: "/coating", label: "Окраска" },
   { href: "/wholesale", label: "Оптом" },
   { href: "/delivery", label: "Доставка" },
   { href: "/about", label: "О компании" },
@@ -47,7 +49,7 @@ export function Header() {
           ))}
         </nav>
         <div className="header-actions">
-          <a className="header-phone" href="tel:+79200050110">
+          <a className="header-phone" href={telHref(company.phones[0])}>
             {company.phones[0]}
           </a>
           <HeaderIcons />

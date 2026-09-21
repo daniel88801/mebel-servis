@@ -9,23 +9,17 @@ import { NextResponse, type NextRequest } from "next/server";
  * весь JSON на 1,1 МБ. Сверку со справочником делает тест ниже по файлу.
  */
 const CATEGORY_IDS = new Set([
-  "sale",
   "army",
   "beds",
   "corpus",
   "frame",
-  "folding",
-  "plastic",
-  "covers",
   "office",
   "students",
   "lockers",
-  "bedding",
   "hotels",
   "workers",
   "dorms",
   "industrial",
-  "banquet",
   "medical",
   "safes",
 ]);

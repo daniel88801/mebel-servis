@@ -9,3 +9,7 @@ export function money(n: number | null | undefined) {
 export function productHref(id: string) {
   return `/product/${encodeURIComponent(id)}`;
 }
+
+export function telHref(phone: string) {
+  return `tel:+${phone.replace(/\D/g, "")}`;
+}

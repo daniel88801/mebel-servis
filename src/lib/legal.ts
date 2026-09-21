@@ -1,15 +1,17 @@
+import { company } from "@/data/catalog";
+
 /** Версия публичных документов. Меняйте вместе с текстом политики, согласия и оферты. */
-export const LEGAL_VERSION = "2026-09-03";
+export const LEGAL_VERSION = "2026-09-21";
 
 export const OPERATOR = {
-  short: "Мебель-Сервис",
-  legal: "ООО «Мебель-Сервис»",
-  inn: "5257204453",
-  kpp: "525701001",
-  ogrn: "1215200033003",
-  address: "603116, Нижний Новгород, ул. Гордеевская, 139Б",
-  email: "m1-mebelservis-nn@mail.ru",
-  phones: ["+7 (920) 005-01-10", "+7 (930) 811-73-95"],
-  hours: "Пн–Пт 9:00–17:00",
+  short: company.name,
+  legal: company.legal,
+  inn: company.inn,
+  kpp: company.kpp,
+  ogrn: company.ogrn,
+  address: company.address,
+  email: company.email,
+  phones: company.phones,
+  hours: company.hours,
   site: "https://meb-srv.ru",
 } as const;

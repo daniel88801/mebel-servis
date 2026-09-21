@@ -40,7 +40,7 @@ export async function sendEmail(subject: string, html: string) {
   try {
     await mailer.sendMail({
       from: process.env.SMTP_FROM ?? `Мебель-Сервис <${process.env.SMTP_USER}>`,
-      to: process.env.LEAD_EMAIL_TO ?? company.email,
+      to: process.env.LEAD_EMAIL_TO ?? company.emails.join(", "),
       subject,
       html,
       text: html.replace(/<[^>]+>/g, ""),

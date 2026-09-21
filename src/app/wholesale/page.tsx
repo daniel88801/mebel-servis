@@ -3,6 +3,7 @@ import { LeadForm } from "@/components/LeadForm";
 import { PdConsentText } from "@/components/LegalConsent";
 import { Todo, TodoBlock } from "@/components/Todo";
 import { categories, company, products } from "@/data/catalog";
+import { telHref } from "@/lib/format";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata = pageMeta({
@@ -132,13 +133,13 @@ export default function WholesalePage() {
 
       <section className="section" style={{ paddingTop: 0 }}>
         <div className="text-page prose">
-          <TodoBlock title="Что подтвердить перед запуском страницы">
+          <TodoBlock title="Что ещё не закрыто по опту">
             <ul>
               <li>Минимальная партия или сумма, с которой действует оптовая цена</li>
               <li>Шкала скидок по объёму</li>
-              <li>Нужны ли реквизиты покупателя для выдачи прайса</li>
-              <li>Оказываете ли сборку и расстановку на объекте</li>
-              <li>Примеры выполненных объектов — их стоит вынести в отдельный раздел</li>
+              <li>Прайс по реквизитам юрлица или любому, кто написал</li>
+              <li>Сборка и расстановка на объекте: делаете сами, нет или через подрядчика</li>
+              <li>Фото реальных объектов — заказчик пришлёт, блок не публикуем без файлов</li>
             </ul>
           </TodoBlock>
         </div>
@@ -159,11 +160,17 @@ export default function WholesalePage() {
             </p>
             <p style={{ marginTop: 12, color: "var(--ink-2)" }}>
               Телефон:{" "}
-              <a href="tel:+79200050110">
+              <a href={telHref(company.phones[0])}>
                 <strong>{company.phones[0]}</strong>
               </a>
               <br />
-              Почта: <a href={`mailto:${company.email}`}>{company.email}</a>
+              Почта:{" "}
+              {company.emails.map((email, i) => (
+                <span key={email}>
+                  {i > 0 && ", "}
+                  <a href={`mailto:${email}`}>{email}</a>
+                </span>
+              ))}
               <br />
               {company.hours}
             </p>
