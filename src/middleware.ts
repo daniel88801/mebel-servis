@@ -15,13 +15,9 @@ const CATEGORY_IDS = new Set([
   "frame",
   "office",
   "students",
-  "lockers",
   "hotels",
   "workers",
   "dorms",
-  "industrial",
-  "medical",
-  "safes",
 ]);
 
 export function middleware(request: NextRequest) {

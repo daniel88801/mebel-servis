@@ -297,9 +297,7 @@ export default async function ProductPage({ params }: Props) {
             priority
             sizes="(max-width: 980px) 100vw, 50vw"
           />
-          {product.category === "sale" && (
-            <span className="badge badge-sale">Распродажа</span>
-          )}
+          {product.category === "sale" && <span className="badge badge-sale">Распродажа</span>}
           <div className="gallery-plate">
             <span>{product.sku}</span>
             {product.sizes && <span>{product.sizes} мм</span>}
@@ -320,8 +318,7 @@ export default async function ProductPage({ params }: Props) {
               "Цена по запросу"
             ) : (
               <>
-                <small>от</small> {money(product.price)}{" "}
-                <small>оптовая цена — по запросу</small>
+                <small>от</small> {money(product.price)} <small>оптовая цена — по запросу</small>
               </>
             )}
           </div>

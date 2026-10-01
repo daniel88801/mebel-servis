@@ -103,8 +103,7 @@ export default function PaymentPage() {
               ))}
             </div>
             <p className="note" style={{ marginTop: 16 }}>
-              Расчётный счёт, корреспондентский счёт и БИК:{" "}
-              <Todo>реквизиты счёта</Todo>.
+              Расчётный счёт, корреспондентский счёт и БИК: <Todo>реквизиты счёта</Todo>.
             </p>
             <p className="note" style={{ marginTop: 16 }}>
               Карточку предприятия PDF и счёт пришлём по запросу на {company.emails.join(" или ")}.

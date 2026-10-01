@@ -11,7 +11,8 @@ function parseLine(raw: Record<string, unknown>): Omit<CartLine, "qty"> | null {
   const name = clean(raw.name, 240);
   const image = clean(raw.image, 300);
   if (!id || !name) return null;
-  const price = typeof raw.price === "number" && Number.isFinite(raw.price) ? Math.round(raw.price) : null;
+  const price =
+    typeof raw.price === "number" && Number.isFinite(raw.price) ? Math.round(raw.price) : null;
   return { id, sku, name, image, price };
 }
 

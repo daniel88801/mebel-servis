@@ -68,7 +68,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartLine[]>([]);
 
   const refreshUser = useCallback(async () => {
-    const me = await fetch("/api/me").then((r) => r.json()).catch(() => ({ user: null }));
+    const me = await fetch("/api/me")
+      .then((r) => r.json())
+      .catch(() => ({ user: null }));
     setUser(me.user ?? null);
     return me.user as ShopUser | null;
   }, []);
@@ -76,7 +78,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      const me = await fetch("/api/me").then((r) => r.json()).catch(() => ({ user: null }));
+      const me = await fetch("/api/me")
+        .then((r) => r.json())
+        .catch(() => ({ user: null }));
       if (cancelled) return;
       const current = (me.user ?? null) as ShopUser | null;
       setUser(current);
@@ -90,7 +94,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
           });
           localStorage.removeItem(CART_KEY);
         }
-        const data = await fetch("/api/cart").then((r) => r.json()).catch(() => ({ items: [] }));
+        const data = await fetch("/api/cart")
+          .then((r) => r.json())
+          .catch(() => ({ items: [] }));
         if (!cancelled) setItems(data.items ?? []);
       } else {
         setItems(readLocal());
@@ -117,7 +123,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ...line, qty }),
-        }).then((r) => r.json()).then((d) => d.items && setItems(d.items)).catch(() => {});
+        })
+          .then((r) => r.json())
+          .then((d) => d.items && setItems(d.items))
+          .catch(() => {});
       }
     },
     [user],
@@ -126,7 +135,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const setQty = useCallback(
     (id: string, qty: number) => {
       setItems((prev) => {
-        const next = qty < 1 ? prev.filter((p) => p.id !== id) : prev.map((p) => (p.id === id ? { ...p, qty } : p));
+        const next =
+          qty < 1
+            ? prev.filter((p) => p.id !== id)
+            : prev.map((p) => (p.id === id ? { ...p, qty } : p));
         if (!user) writeLocal(next);
         return next;
       });
@@ -135,7 +147,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "set", id, qty }),
-        }).then((r) => r.json()).then((d) => d.items && setItems(d.items)).catch(() => {});
+        })
+          .then((r) => r.json())
+          .then((d) => d.items && setItems(d.items))
+          .catch(() => {});
       }
     },
     [user],

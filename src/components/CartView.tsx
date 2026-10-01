@@ -27,7 +27,10 @@ export function CartView() {
   async function onOrder(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (status === "sending") return;
-    const data = Object.fromEntries(new FormData(e.currentTarget).entries()) as Record<string, string>;
+    const data = Object.fromEntries(new FormData(e.currentTarget).entries()) as Record<
+      string,
+      string
+    >;
     setStatus("sending");
     setError("");
     try {
@@ -82,7 +85,11 @@ export function CartView() {
                 </p>
               </div>
               <div className="cart-qty">
-                <button type="button" aria-label="Меньше" onClick={() => setQty(item.id, item.qty - 1)}>
+                <button
+                  type="button"
+                  aria-label="Меньше"
+                  onClick={() => setQty(item.id, item.qty - 1)}
+                >
                   −
                 </button>
                 <input
@@ -92,7 +99,11 @@ export function CartView() {
                   onChange={(e) => setQty(item.id, Number(e.target.value) || 1)}
                   aria-label="Количество"
                 />
-                <button type="button" aria-label="Больше" onClick={() => setQty(item.id, item.qty + 1)}>
+                <button
+                  type="button"
+                  aria-label="Больше"
+                  onClick={() => setQty(item.id, item.qty + 1)}
+                >
                   +
                 </button>
                 <button type="button" className="cart-remove" onClick={() => remove(item.id)}>
@@ -103,7 +114,14 @@ export function CartView() {
           ))}
         </ul>
         <p className="note" style={{ marginTop: 12 }}>
-          {count} поз. {priced ? <>· ориентир <small>от</small> {money(sum)}</> : "· часть позиций — по запросу"}
+          {count} поз.{" "}
+          {priced ? (
+            <>
+              · ориентир <small>от</small> {money(sum)}
+            </>
+          ) : (
+            "· часть позиций — по запросу"
+          )}
           {" · "}
           <button type="button" className="linkish" onClick={clear}>
             Очистить
@@ -122,7 +140,9 @@ export function CartView() {
 
         {!user ? (
           <div className="auth-gate">
-            <p>Чтобы оформить заказ, войдите в кабинет — так заявка и история сохранятся на сервере.</p>
+            <p>
+              Чтобы оформить заказ, войдите в кабинет — так заявка и история сохранятся на сервере.
+            </p>
             <div className="hero-actions">
               <Link className="btn btn-primary" href="/login?next=/cart">
                 Войти

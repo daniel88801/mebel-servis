@@ -15,7 +15,8 @@ export async function POST(request: Request) {
   const choice = raw.choice === "necessary" ? "necessary" : raw.choice === "all" ? "all" : "";
   if (!choice) return NextResponse.json({ error: "Нет выбора" }, { status: 422 });
 
-  const version = typeof raw.version === "string" && raw.version ? raw.version.slice(0, 32) : LEGAL_VERSION;
+  const version =
+    typeof raw.version === "string" && raw.version ? raw.version.slice(0, 32) : LEGAL_VERSION;
   logCookieConsent({
     choice,
     version,

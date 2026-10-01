@@ -83,7 +83,9 @@ export function addCartLine(userId: string, line: Omit<CartLine, "qty">, qty = 1
 
 export function setCartQty(userId: string, productId: string, qty: number) {
   if (qty < 1) {
-    getDb().prepare("DELETE FROM cart_items WHERE user_id = ? AND product_id = ?").run(userId, productId);
+    getDb()
+      .prepare("DELETE FROM cart_items WHERE user_id = ? AND product_id = ?")
+      .run(userId, productId);
     return;
   }
   getDb()
@@ -184,9 +186,7 @@ export function getOrder(userId: string, id: string) {
     .get(id, userId) as Order | undefined;
   if (!order) return null;
   const items = getDb()
-    .prepare(
-      "SELECT product_id, sku, name, image, price, qty FROM order_items WHERE order_id = ?",
-    )
+    .prepare("SELECT product_id, sku, name, image, price, qty FROM order_items WHERE order_id = ?")
     .all(id) as OrderItem[];
   return { ...order, items };
 }

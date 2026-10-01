@@ -67,7 +67,9 @@ export default async function AccountPage() {
       <section className="section" style={{ paddingTop: 36 }}>
         <h2 style={{ fontSize: "1.4rem", marginBottom: 16 }}>Заказы</h2>
         {orders.length === 0 ? (
-          <p className="note">Пока нет заказов. Соберите спецификацию в корзине и оформите заявку.</p>
+          <p className="note">
+            Пока нет заказов. Соберите спецификацию в корзине и оформите заявку.
+          </p>
         ) : (
           <ul className="quote-list">
             {orders.map((o) => (

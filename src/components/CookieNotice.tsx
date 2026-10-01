@@ -48,7 +48,11 @@ export function CookieNotice() {
         <button className="btn btn-primary btn-sm" type="button" onClick={() => accept("all")}>
           Принять все
         </button>
-        <button className="btn btn-ghost btn-sm cookie-necessary" type="button" onClick={() => accept("necessary")}>
+        <button
+          className="btn btn-ghost btn-sm cookie-necessary"
+          type="button"
+          onClick={() => accept("necessary")}
+        >
           Только необходимые
         </button>
       </div>

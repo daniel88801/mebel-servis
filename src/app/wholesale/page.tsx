@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LeadForm } from "@/components/LeadForm";
 import { PdConsentText } from "@/components/LegalConsent";
-import { Todo, TodoBlock } from "@/components/Todo";
+import { TodoBlock } from "@/components/Todo";
 import { categories, company, products } from "@/data/catalog";
 import { telHref } from "@/lib/format";
 import { pageMeta } from "@/lib/seo";
@@ -61,10 +61,8 @@ export default function WholesalePage() {
           <span>м² собственного производства</span>
         </div>
         <div>
-          <b>
-            <Todo>N</Todo>
-          </b>
-          <span>минимальная партия для оптовой цены</span>
+          <b>По смете</b>
+          <span>цена партии считается индивидуально</span>
         </div>
       </div>
 
@@ -81,8 +79,8 @@ export default function WholesalePage() {
           <article className="info-card">
             <h2>Оптовая цена</h2>
             <p>
-              Цены в каталоге ориентировочные и указаны от. Для партии считаем отдельно — скидка
-              зависит от объёма: <Todo>шкала скидок по объёму</Todo>.
+              Цены в каталоге ориентировочные и указаны от. Для партии считаем отдельно: единой
+              шкалы скидок нет, условия обсуждаем индивидуально под объём, состав и сроки заказа.
             </p>
           </article>
           <article className="info-card">
@@ -135,8 +133,6 @@ export default function WholesalePage() {
         <div className="text-page prose">
           <TodoBlock title="Что ещё не закрыто по опту">
             <ul>
-              <li>Минимальная партия или сумма, с которой действует оптовая цена</li>
-              <li>Шкала скидок по объёму</li>
               <li>Прайс по реквизитам юрлица или любому, кто написал</li>
               <li>Сборка и расстановка на объекте: делаете сами, нет или через подрядчика</li>
               <li>Фото реальных объектов — заказчик пришлёт, блок не публикуем без файлов</li>

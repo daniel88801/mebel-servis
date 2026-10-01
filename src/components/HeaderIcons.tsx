@@ -32,7 +32,9 @@ export function HeaderIcons() {
           <path d="M5 7h14l-1.2 11.2H6.2L5 7Z" />
           <path d="M8 7V6.2A4 4 0 0 1 12 2.2 4 4 0 0 1 16 6.2V7" />
         </svg>
-        {ready && count > 0 && <span className="header-icon-count">{count > 99 ? "99+" : count}</span>}
+        {ready && count > 0 && (
+          <span className="header-icon-count">{count > 99 ? "99+" : count}</span>
+        )}
       </Link>
     </div>
   );

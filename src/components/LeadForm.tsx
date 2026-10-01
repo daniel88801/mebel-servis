@@ -108,7 +108,9 @@ export function LeadForm({
               required
               disabled={sending}
               defaultValue={defaultName}
-              placeholder={variant === "request" || variant === "cart" ? "Как к вам обращаться" : undefined}
+              placeholder={
+                variant === "request" || variant === "cart" ? "Как к вам обращаться" : undefined
+              }
             />
           </label>
           <label>

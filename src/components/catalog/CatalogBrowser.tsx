@@ -120,6 +120,11 @@ export function CatalogBrowser({
             " / Каталог"
           )}
         </p>
+        {category && (
+          <Link className="back-link" href="/catalog" scroll={false}>
+            <span aria-hidden="true">←</span> Все разделы
+          </Link>
+        )}
         <h1>
           {category ? category.name : "Каталог"}
           {category?.id === "sale" && (

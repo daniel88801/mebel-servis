@@ -80,9 +80,8 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 export function findUserByEmail(email: string) {
-  return getDb()
-    .prepare("SELECT * FROM users WHERE email = ?")
-    .get(email.toLowerCase()) as (User & { password_hash: string }) | undefined;
+  return getDb().prepare("SELECT * FROM users WHERE email = ?").get(email.toLowerCase()) as
+    (User & { password_hash: string }) | undefined;
 }
 
 export function createUser(input: {
@@ -99,7 +98,15 @@ export function createUser(input: {
       `INSERT INTO users (id, email, password_hash, name, phone, company, created_at)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
     )
-    .run(id, input.email.toLowerCase(), input.passwordHash, input.name, input.phone, input.company, created);
+    .run(
+      id,
+      input.email.toLowerCase(),
+      input.passwordHash,
+      input.name,
+      input.phone,
+      input.company,
+      created,
+    );
   return id;
 }
 

@@ -37,12 +37,12 @@ html {
 h1,
 h2,
 .section-head h2 {
-  font-family: var(--font-display), Unbounded, var(--font-sans), sans-serif;
+  font-family: var(--font-sans), Inter, "Segoe UI", sans-serif;
   letter-spacing: -0.03em;
 }
 
 body {
-  font-family: var(--font-sans), Manrope, "Segoe UI", sans-serif;
+  font-family: var(--font-sans), Inter, "Segoe UI", sans-serif;
   background: var(--paper);
   color: var(--ink);
   line-height: 1.55;
@@ -477,7 +477,12 @@ select {
   z-index: 1;
   pointer-events: none;
   /* Плоский скрим вместо двух мягких градиентов: чёткая граница читаемости */
-  background: linear-gradient(90deg, rgba(17, 17, 17, 0.82) 0%, rgba(17, 17, 17, 0.72) 46%, rgba(17, 17, 17, 0.18) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(17, 17, 17, 0.82) 0%,
+    rgba(17, 17, 17, 0.72) 46%,
+    rgba(17, 17, 17, 0.18) 100%
+  );
 }
 
 .hero-inner {
@@ -509,7 +514,7 @@ select {
 }
 
 .hero h1 {
-  font-family: var(--font-display), Unbounded, var(--font-sans), sans-serif;
+  font-family: var(--font-sans), Inter, "Segoe UI", sans-serif;
   font-size: clamp(2.4rem, 6.4vw, 6rem);
   line-height: 0.95;
   letter-spacing: -0.045em;
@@ -755,7 +760,7 @@ select {
 }
 
 .card-body h3 {
-  font-family: var(--font-sans), Manrope, sans-serif;
+  font-family: var(--font-sans), Inter, sans-serif;
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.01em;
@@ -2334,13 +2339,10 @@ body:has(.auth-screen) .footer {
   margin-bottom: 10px;
 }
 
+/* Без внутренней прокрутки: иначе при переходе в раздел список отматывался
+   к началу и выбранная плашка уезжала из виду. Разделов девять — помещаются. */
 .fsections ul {
   list-style: none;
-  max-height: 288px;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  margin-right: -6px;
-  padding-right: 6px;
 }
 
 .fsections a {
@@ -2803,10 +2805,6 @@ select:focus {
 }
 
 /* Список разделов прокручивается — показываем это затуханием нижнего края */
-.fsections ul {
-  mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent);
-  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent);
-}
 
 /* ============================================================
    Страница «О компании»
@@ -3172,7 +3170,9 @@ select:focus {
 .link-arrow {
   border-bottom: 1px solid var(--ink);
   padding-bottom: 2px;
-  transition: 90ms color linear, 90ms border-color linear;
+  transition:
+    90ms color linear,
+    90ms border-color linear;
 }
 
 .link-arrow::after {
@@ -3355,7 +3355,6 @@ select:focus {
   }
 }
 
-
 /* Объекты: три фотографии с подписями вместо ещё одной сетки каталога */
 .objects {
   display: grid;
@@ -3502,7 +3501,9 @@ select:focus {
   border: 1px solid var(--ink);
   padding: 8px 14px;
   color: var(--ink);
-  transition: 90ms background-color linear, 90ms color linear;
+  transition:
+    90ms background-color linear,
+    90ms color linear;
 }
 
 .work:hover .work-btn {
@@ -3543,4 +3544,28 @@ select:focus {
   border-left: 2px solid var(--copper);
   color: var(--ink-2);
   font-size: 0.92rem;
+}
+
+/* Возврат из раздела ко всему каталогу */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 7px 14px 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--ink-2);
+  font-size: 0.88rem;
+  transition:
+    border-color 0.16s,
+    color 0.16s,
+    transform 0.16s;
+}
+
+.back-link:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+  transform: translateX(-2px);
 }

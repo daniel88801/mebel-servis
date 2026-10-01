@@ -27,7 +27,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Укажите почту и пароль" }, { status: 422 });
   }
   if (limited(email)) {
-    return NextResponse.json({ error: "Слишком много попыток. Подождите 15 минут." }, { status: 429 });
+    return NextResponse.json(
+      { error: "Слишком много попыток. Подождите 15 минут." },
+      { status: 429 },
+    );
   }
 
   const user = findUserByEmail(email);

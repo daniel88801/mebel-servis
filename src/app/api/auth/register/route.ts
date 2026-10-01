@@ -13,8 +13,10 @@ export async function POST(request: Request) {
   const password = typeof raw.password === "string" ? raw.password : "";
 
   if (!name) return NextResponse.json({ error: "Укажите имя" }, { status: 422 });
-  if (!looksLikeEmail(email)) return NextResponse.json({ error: "Проверьте электронную почту" }, { status: 422 });
-  if (!looksLikePhone(phone)) return NextResponse.json({ error: "Проверьте номер телефона" }, { status: 422 });
+  if (!looksLikeEmail(email))
+    return NextResponse.json({ error: "Проверьте электронную почту" }, { status: 422 });
+  if (!looksLikePhone(phone))
+    return NextResponse.json({ error: "Проверьте номер телефона" }, { status: 422 });
   if (!isStrongPassword(password)) {
     return NextResponse.json({ error: "Пароль не короче 8 символов" }, { status: 422 });
   }

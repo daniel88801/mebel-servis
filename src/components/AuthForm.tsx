@@ -74,17 +74,35 @@ export function AuthForm({
       {mode === "login" ? (
         <label>
           Пароль
-          <input name="password" type="password" required minLength={8} autoComplete="current-password" />
+          <input
+            name="password"
+            type="password"
+            required
+            minLength={8}
+            autoComplete="current-password"
+          />
         </label>
       ) : (
         <div className="auth-row">
           <label>
             Пароль
-            <input name="password" type="password" required minLength={8} autoComplete="new-password" />
+            <input
+              name="password"
+              type="password"
+              required
+              minLength={8}
+              autoComplete="new-password"
+            />
           </label>
           <label>
             Ещё раз
-            <input name="password2" type="password" required minLength={8} autoComplete="new-password" />
+            <input
+              name="password2"
+              type="password"
+              required
+              minLength={8}
+              autoComplete="new-password"
+            />
           </label>
         </div>
       )}
@@ -110,7 +128,8 @@ export function AuthForm({
           </>
         ) : (
           <>
-            Уже есть кабинет? <Link href={`/login?next=${encodeURIComponent(safeNext)}`}>Войти</Link>
+            Уже есть кабинет?{" "}
+            <Link href={`/login?next=${encodeURIComponent(safeNext)}`}>Войти</Link>
           </>
         )}
       </p>

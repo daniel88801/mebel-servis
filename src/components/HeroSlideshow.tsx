@@ -72,13 +72,7 @@ export function HeroSlideshow() {
     >
       {SLIDES.map((slide, i) => (
         <div className={`hero-slide${i === index ? " is-on" : ""}`} key={slide.src}>
-          <Image
-            src={slide.src}
-            alt={slide.alt}
-            fill
-            priority={i === 0}
-            sizes="100vw"
-          />
+          <Image src={slide.src} alt={slide.alt} fill priority={i === 0} sizes="100vw" />
         </div>
       ))}
 

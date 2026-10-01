@@ -166,7 +166,7 @@ export function FilterPanel({
         <p className="fsections-title">Разделы</p>
         <ul>
           <li>
-            <Link href="/catalog" className={activeCategory ? "" : "is-active"}>
+            <Link href="/catalog" scroll={false} className={activeCategory ? "" : "is-active"}>
               <span>Все разделы</span>
               <span className="fcheck-count">{categoryCounts.get("all") ?? 0}</span>
             </Link>
@@ -175,6 +175,7 @@ export function FilterPanel({
             <li key={c.id}>
               <Link
                 href={`/catalog/${c.id}`}
+                scroll={false}
                 className={`${c.id === "sale" ? "is-sale" : ""}${
                   activeCategory?.id === c.id ? " is-active" : ""
                 }`.trim()}

@@ -33,7 +33,7 @@ const hits = categories
   .map(toCardData);
 
 /** Витрина первого экрана: одна крупная вырезка и лента мелких под ней. */
-const showcase = ["beds", "lockers", "office", "students", "army", "safes"]
+const showcase = ["beds", "corpus", "office", "students", "army", "dorms"]
   .map((id) => productsByCategory(id)[0])
   .filter(Boolean);
 const [lead, ...strip] = showcase;
@@ -107,7 +107,10 @@ export default function HomePage() {
           <Link className="direction direction-coat" href="/coating">
             <p className="mono">02 · Услуга</p>
             <h2>Порошковая окраска</h2>
-            <p>Окрашивание металлических изделий порошковой краской. Можно заказать отдельно от мебели.</p>
+            <p>
+              Окрашивание металлических изделий порошковой краской. Можно заказать отдельно от
+              мебели.
+            </p>
             <span className="link-arrow mono">Условия услуги</span>
           </Link>
         </div>
@@ -196,14 +199,20 @@ export default function HomePage() {
               </div>
               <p>
                 Одни и те же изделия работают в казарме, общежитии и учебном классе — меняются
-                комплектация и объём партии. Мебель не щадят: сменяемый состав, ежедневная
-                нагрузка, перестановки и переезды.
+                комплектация и объём партии. Мебель не щадят: сменяемый состав, ежедневная нагрузка,
+                перестановки и переезды.
               </p>
             </div>
             <div className="works">
               {objects.map((o) => (
                 <Link className="work" key={o.src} href={o.href}>
-                  <Image src={o.src} alt={o.alt} width={1200} height={800} sizes="(max-width: 900px) 100vw, 50vw" />
+                  <Image
+                    src={o.src}
+                    alt={o.alt}
+                    width={1200}
+                    height={800}
+                    sizes="(max-width: 900px) 100vw, 50vw"
+                  />
                   <div className="work-foot">
                     <div>
                       <b>{o.title}</b>
