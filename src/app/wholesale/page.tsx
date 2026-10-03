@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { LeadForm } from "@/components/LeadForm";
 import { PdConsentText } from "@/components/LegalConsent";
-import { TodoBlock } from "@/components/Todo";
 import { categories, company, products } from "@/data/catalog";
 import { telHref } from "@/lib/format";
 import { pageMeta } from "@/lib/seo";
@@ -127,18 +126,6 @@ export default function WholesalePage() {
             </li>
           ))}
         </ol>
-      </section>
-
-      <section className="section" style={{ paddingTop: 0 }}>
-        <div className="text-page prose">
-          <TodoBlock title="Что ещё не закрыто по опту">
-            <ul>
-              <li>Прайс по реквизитам юрлица или любому, кто написал</li>
-              <li>Сборка и расстановка на объекте: делаете сами, нет или через подрядчика</li>
-              <li>Фото реальных объектов — заказчик пришлёт, блок не публикуем без файлов</li>
-            </ul>
-          </TodoBlock>
-        </div>
       </section>
 
       <section className="section" style={{ paddingTop: 0, paddingBottom: 72 }}>

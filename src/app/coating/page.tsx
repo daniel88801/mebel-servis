@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Todo, TodoBlock } from "@/components/Todo";
 import { RequestButton } from "@/components/RequestModal";
 import { company } from "@/data/catalog";
 import { pageMeta } from "@/lib/seo";
@@ -50,8 +49,8 @@ export default function CoatingPage() {
           <p className="mono">03 · Срок</p>
           <h2>Считаем по объёму</h2>
           <p>
-            Как и мебель под заказ, срок окраски зависит от объёма партии. Дни <Todo>от и до</Todo>{" "}
-            называем после заявки.
+            Как и мебель под заказ, срок окраски зависит от объёма партии. Называем его после
+            заявки, когда известны состав и количество.
           </p>
           <p className="note">Цвет любой по RAL — под заказ доступна вся палитра.</p>
         </article>
@@ -84,13 +83,6 @@ export default function CoatingPage() {
             <p>
               Режим: {company.hours}. Телефон {company.phones[0]}.
             </p>
-            <TodoBlock title="Что ещё не закрыто по окраске">
-              <ul>
-                <li>Срок в днях: от и до, и от чего ещё зависит, кроме объёма</li>
-                <li>Предельный вес детали — габарит камеры известен, вес нет</li>
-                <li>Форма предварительного расчёта на сайте, если она нужна</li>
-              </ul>
-            </TodoBlock>
           </div>
         </div>
       </section>

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Todo, TodoBlock } from "@/components/Todo";
 import { RequestButton } from "@/components/RequestModal";
 import { company } from "@/data/catalog";
 import { pageMeta } from "@/lib/seo";
@@ -44,7 +43,7 @@ export default function PaymentPage() {
           <p className="mono">Юридическим лицам</p>
           <h2>Безналичный расчёт</h2>
           <p>
-            Предоплата 50%. Момент отгрузки — <Todo>после предоплаты или после полной оплаты</Todo>.
+            Предоплата 50% по счёту.
           </p>
           <p className="note">Закрывающие документы: УПД.</p>
         </article>
@@ -80,13 +79,6 @@ export default function PaymentPage() {
               соглашением. Декларации и сертификаты по ТР ТС 025/2012 высылаем к отгрузке по
               запросу.
             </p>
-
-            <TodoBlock title="Что ещё не закрыто по оплате">
-              <ul>
-                <li>Момент отгрузки: после 50% или после полной оплаты</li>
-                <li>Расчётный счёт, корреспондентский счёт и БИК</li>
-              </ul>
-            </TodoBlock>
           </div>
 
           <aside className="form-card">
@@ -102,9 +94,6 @@ export default function PaymentPage() {
                 </div>
               ))}
             </div>
-            <p className="note" style={{ marginTop: 16 }}>
-              Расчётный счёт, корреспондентский счёт и БИК: <Todo>реквизиты счёта</Todo>.
-            </p>
             <p className="note" style={{ marginTop: 16 }}>
               Карточку предприятия PDF и счёт пришлём по запросу на {company.emails.join(" или ")}.
             </p>
