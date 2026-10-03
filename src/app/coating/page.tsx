@@ -59,11 +59,9 @@ export default function CoatingPage() {
 
       <section className="section" style={{ paddingTop: 48 }}>
         <div className="split">
-          {/* TODO: заменить на съёмку своей покрасочной камеры в работе —
-              здесь кадр цеха, камера с подвесами слева. */}
           <Image
-            src="/images/2.jpg"
-            alt="Покрасочная камера с подвесами в цехе"
+            src="/images/powder-coating-booth.jpg"
+            alt="Оператор наносит порошковую краску на стальные каркасы мебели в камере"
             width={1280}
             height={720}
             sizes="(max-width: 980px) 100vw, 50vw"
@@ -90,7 +88,6 @@ export default function CoatingPage() {
               <ul>
                 <li>Срок в днях: от и до, и от чего ещё зависит, кроме объёма</li>
                 <li>Предельный вес детали — габарит камеры известен, вес нет</li>
-                <li>Фотография своей покрасочной камеры в работе вместо общего кадра цеха</li>
                 <li>Форма предварительного расчёта на сайте, если она нужна</li>
               </ul>
             </TodoBlock>
