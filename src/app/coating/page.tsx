@@ -59,10 +59,10 @@ export default function CoatingPage() {
       <section className="section" style={{ paddingTop: 48 }}>
         <div className="split">
           <Image
-            src="/images/powder-coating-booth.jpg"
-            alt="Оператор наносит порошковую краску на стальные каркасы мебели в камере"
-            width={1280}
-            height={720}
+            src="/images/powder-coating-spray.jpg"
+            alt="Нанесение оранжевой порошковой краски пистолетом на стальные каркасы с прорезями"
+            width={1248}
+            height={832}
             sizes="(max-width: 980px) 100vw, 50vw"
           />
           <div className="text-page prose">
